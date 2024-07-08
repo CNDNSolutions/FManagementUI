@@ -1,21 +1,21 @@
-import './assets/main.css'
-import '@coreui/coreui/dist/css/coreui.min.css'
+import "./assets/main.css";
+import "@coreui/coreui/dist/css/coreui.min.css";
 
-import { createWebHistory, createRouter } from 'vue-router'
+import { createWebHistory, createRouter } from "vue-router";
 
-import { createApp } from 'vue'
+import { createApp } from "vue";
 
-import App from './App.vue'
+import App from "./App.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            name: 'Dashboard',
-            path: '/',
-            component: () => import('@/views/DashboardView.vue')
-        }
-    ]
-})
+            name: "Dashboard",
+            path: "/home/dashboard",
+            component: () => import("@/views/DashboardView.vue"),
+        },
+    ],
+});
 
-createApp(App).use(router).mount('#app')
+createApp(App).use(router).mount("#app");

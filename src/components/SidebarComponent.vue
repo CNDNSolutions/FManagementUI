@@ -1,90 +1,31 @@
 <script setup>
-import {
-    CSidebar,
-    CSidebarHeader,
-    CSidebarBrand,
-    CSidebarNav,
-    CNavTitle,
-    CNavItem,
-    CBadge,
-    CNavGroup,
-    CSidebarFooter,
-    CSidebarToggler,
-} from "@coreui/vue";
+import { CSidebar, CSidebarHeader, CSidebarBrand, CSidebarNav, CNavTitle, CNavItem, CBadge, CNavGroup, CSidebarFooter, CSidebarToggler } from "@coreui/vue";
 import CIcon from "@coreui/icons-vue";
 import * as icon from "@coreui/icons";
 </script>
 
 <template>
-    <CSidebar
-        color-scheme="white"
-        class="!min-h-full nunito-all border-r"
-        :narrow="narrow">
+    <CSidebar color-scheme="dark" class="nunito-all border" :narrow="narrow">
         <CSidebarNav>
-            <CSidebarHeader>
+            <CSidebarHeader class="border-bottom mb-3 min-w-12">
                 <CSidebarBrand class="font-bold">CNDN</CSidebarBrand>
             </CSidebarHeader>
-            <CNavTitle>Nav Title</CNavTitle>
             <CNavItem href="#">
                 <CIcon customClassName="nav-icon" :icon="icon.cilSpeedometer" />
-                Nav item
+                Dashboard
+            </CNavItem>
+            <CNavTitle>Statistics</CNavTitle>
+            <CNavItem href="#">
+                <CIcon customClassName="nav-icon" :icon="icon.cilMoney" />
+                Expenses
             </CNavItem>
             <CNavItem href="#">
-                <CIcon customClassName="nav-icon" :icon="icon.cilSpeedometer" />
-                With badge
-                <CBadge class="ms-auto" color="primary">NEW</CBadge>
-            </CNavItem>
-            <CNavGroup>
-                <template #togglerContent>
-                    <CIcon customClassName="nav-icon" :icon="icon.cilPuzzle" />
-                    Nav dropdown
-                </template>
-                <CNavItem href="#">
-                    <span class="nav-icon"
-                        ><span class="nav-icon-bullet"></span
-                    ></span>
-                    Nav dropdown item
-                </CNavItem>
-                <CNavItem href="#">
-                    <span class="nav-icon"
-                        ><span class="nav-icon-bullet"></span
-                    ></span>
-                    Nav dropdown item
-                </CNavItem>
-            </CNavGroup>
-            <CNavGroup>
-                <template #togglerContent>
-                    <CIcon customClassName="nav-icon" :icon="icon.cilPuzzle" />
-                    Nav dropdown2
-                </template>
-                <CNavItem href="#">
-                    <span class="nav-icon"
-                        ><span class="nav-icon-bullet"></span
-                    ></span>
-                    Nav dropdown item
-                </CNavItem>
-                <CNavItem href="#">
-                    <span class="nav-icon"
-                        ><span class="nav-icon-bullet"></span
-                    ></span>
-                    Nav dropdown item
-                </CNavItem>
-            </CNavGroup>
-            <CNavItem href="https://coreui.io">
-                <CIcon
-                    customClassName="nav-icon"
-                    :icon="icon.cilCloudDownload" />
-                Download CoreUI
-            </CNavItem>
-            <CNavItem href="https://coreui.io/pro/">
-                <CIcon customClassName="nav-icon" :icon="icon.cilLayers" />
-                Try CoreUI PRO
+                <CIcon customClassName="nav-icon" :icon="icon.cilWallet" />
+                Profit
             </CNavItem>
         </CSidebarNav>
-        <CSidebarFooter
-            class="border-top hover:bg-gray-300"
-            @click="narrow = !narrow">
-            <CSidebarToggler />
+        <CSidebarFooter class="border-top h-12 hover:bg-gray-700/25 cursor-pointer" @click="close()">
+            <CIcon customClassName="nav-icon" :icon="icon.cilChevronRight" class="!h-6 transition-transform duration-500 ease-out" ref="closeIcon" />
         </CSidebarFooter>
     </CSidebar>
 </template>
@@ -95,6 +36,12 @@ export default {
         return {
             narrow: true,
         };
+    },
+    methods: {
+        close() {
+            this.narrow = !this.narrow;
+            this.$refs.closeIcon.$el.classList.toggle("rotate-180");
+        },
     },
 };
 </script>
