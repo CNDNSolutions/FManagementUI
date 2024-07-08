@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    min-height: 100vh;
+}
+  
+*{
+    font-family: "Roboto Condensed", sans-serif;
+    user-select: none;
+}
+  
+#app{
+    min-width: 100%;
+    min-height: 100vh !important;
+}
+
+.roboto{
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+.roboto-all *{
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+.nunito{
+    font-family: "Nunito", sans-serif;
+}
+
+.nunito-all * {
+    font-family: "Nunito", sans-serif;
+}
