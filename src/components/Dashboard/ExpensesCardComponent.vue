@@ -1,6 +1,8 @@
 <script setup>
 import { CChart } from "@coreui/vue-chartjs";
 import { getStyle } from "@coreui/utils";
+import moment from "moment";
+import { data } from "autoprefixer";
 </script>
 
 <template>
@@ -8,15 +10,15 @@ import { getStyle } from "@coreui/utils";
         <div class="w-full p-3 flex justify-between items-center">
             <div class="flex flex-col">
                 <div class="font-bold text-2xl">Expenses</div>
-                <div class="text-base font-light">January - July 2023</div>
+                <div class="text-base font-light">{{ moment().utc(this.data[0].date).format("MMMM") }} {{ moment().utc(this.data[0].date).format("Y") }}</div>
             </div>
-            <div class="text-accent text-3xl font-semibold">$651.2</div>
+            <div class="text-accent text-3xl font-semibold">${{ this.costs.cost.reduce((acc, num) => acc + num, 0) }}</div>
         </div>
         <CChart
             type="line"
             class="h-auto"
             :custom-tooltips="false"
-            :data="{ labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], datasets: [{ label: 'Expenses', data: [78, 81, 80, 45, 34, 12, 40], fill: true }] }"
+            :data="{ labels: this.costs.date, datasets: [{ label: 'Expenses', data: this.costs.cost, fill: true }] }"
             :options="{
                 backgroundColor: getStyle('--primary-transparent'),
                 borderColor: getStyle('--primary'),
@@ -35,4 +37,25 @@ import { getStyle } from "@coreui/utils";
     </div>
 </template>
 
-<script></script>
+<script>
+export default {
+    props: {
+        data: Object,
+    },
+    data() {
+        return {
+            costs: { cost: [], date: [] },
+        };
+    },
+    mounted() {
+        this.data.forEach((item) => {
+            let timeCost = 0;
+            item.costs.forEach((cost) => {
+                timeCost = timeCost + cost.amount;
+            });
+            this.costs.cost.push(timeCost);
+            this.costs.date.push(moment().utc(item.date).day());
+        });
+    },
+};
+</script>
