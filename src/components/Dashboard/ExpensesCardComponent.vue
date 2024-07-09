@@ -10,7 +10,14 @@ import { data } from "autoprefixer";
         <div class="w-full p-3 flex justify-between items-center">
             <div class="flex flex-col">
                 <div class="font-bold text-2xl">Expenses</div>
-                <div class="text-base font-light">{{ moment().utc(this.data[0].date).format("MMMM") }} {{ moment().utc(this.data[0].date).format("Y") }}</div>
+                <div class="text-base font-light">
+                    {{ moment(moment.utc(this.data[0].date, "YYYY-MM-DD HH:mm:ss").toDate()).local().format("MMMM") }} {{ moment(moment.utc(this.data[0].date, "YYYY-MM-DD HH:mm:ss").toDate()).local().format("Y") }} {{ moment(moment.utc(this.data[0].date, "YYYY-MM-DD HH:mm:ss").toDate()).local().format("D") }} -
+                    {{
+                        moment(moment.utc(this.data[this.data.length - 1].date, "YYYY-MM-DD HH:mm:ss").toDate())
+                            .local()
+                            .format("D")
+                    }}
+                </div>
             </div>
             <div class="text-accent text-3xl font-semibold">${{ this.costs.cost.reduce((acc, num) => acc + num, 0) }}</div>
         </div>
@@ -54,7 +61,8 @@ export default {
                 timeCost = timeCost + cost.amount;
             });
             this.costs.cost.push(timeCost);
-            this.costs.date.push(moment().utc(item.date).day());
+            let date = moment(moment.utc(item.date, "YYYY-MM-DD HH:mm:ss").toDate()).local();
+            this.costs.date.push(date.format("D") + " " + date.format("MMM"));
         });
     },
 };

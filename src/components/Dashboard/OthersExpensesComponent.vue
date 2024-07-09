@@ -12,10 +12,10 @@ import * as icon from "@coreui/icons";
 
         <div class="flex flex-col mt-1">
             <div class="flex items-end">
-                <div class="text-2xl">152</div>
+                <div class="text-2xl">{{ costsCount }}</div>
                 <div class="text-xl ml-2">Oreders for</div>
             </div>
-            <div class="font-bold text-3xl text-accent">$1245.5</div>
+            <div class="font-bold text-3xl text-accent">${{ currentCosts }}</div>
         </div>
         <div class="mt-auto flex items-start *:text-sm *:text-red-500">
             <div>(</div>
@@ -27,5 +27,31 @@ import * as icon from "@coreui/icons";
 </template>
 
 <script>
-export default {};
+export default {
+    data() {
+        return {
+            costsCount: 0,
+            currentCosts: 0,
+            lastMontCosts: 0,
+        };
+    },
+    props: {
+        data: Object,
+    },
+
+    mounted() {
+        this.data.forEach((item) => {
+            let timeCost = 0;
+            let timeCostsCount = 0;
+            item.costs.forEach((cost) => {
+                if (cost.type != "product") {
+                    timeCost += cost.amount;
+                    timeCostsCount += 1;
+                }
+            });
+            this.currentCosts += timeCost;
+            this.costsCount += timeCostsCount;
+        });
+    },
+};
 </script>
