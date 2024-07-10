@@ -10,16 +10,16 @@ import * as icon from "@coreui/icons";
             <CSidebarHeader class="border-bottom mb-3 min-w-12">
                 <CSidebarBrand class="font-bold">CNDN</CSidebarBrand>
             </CSidebarHeader>
-            <CNavItem href="#">
+            <CNavItem href="#" @click="goTo('/home/dashboard')">
                 <CIcon customClassName="nav-icon" :icon="icon.cilSpeedometer" />
                 Dashboard
             </CNavItem>
             <CNavTitle>Statistics</CNavTitle>
-            <CNavItem href="#">
+            <CNavItem href="#" @click="goTo('/home/expenses')">
                 <CIcon customClassName="nav-icon" :icon="icon.cilMoney" />
                 Expenses
             </CNavItem>
-            <CNavItem href="#">
+            <CNavItem href="#" @click="goTo('/home/profit')">
                 <CIcon customClassName="nav-icon" :icon="icon.cilWallet" />
                 Profit
             </CNavItem>
@@ -41,6 +41,9 @@ export default {
         close() {
             this.narrow = !this.narrow;
             this.$refs.closeIcon.$el.classList.toggle("rotate-180");
+        },
+        goTo(path) {
+            this.$router.replace({ path: path });
         },
     },
 };

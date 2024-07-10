@@ -11,18 +11,18 @@ import moment from "moment";
 </script>
 
 <template>
-    <div class="w-5/6 @container">
+    <div class="w-5/6 @container" v-if="monthData && yearData && lastMonthData">
         <TitlePathComponent />
         <!-- w-full h-[500px] flex -->
         <div class="w-full h-[1000px] flex flex-col @6xl:flex-row @6xl:h-[500px]">
             <!-- w-1/3 flex flex-col mr-2 -->
             <div class="flex flex-col h-2/3 mb-2 @6xl:h-full @6xl:mr-2 @6xl:w-1/3">
-                <ExpensesCardComponent class="h-[40%] mb-2 @4xl:h-3/5" v-if="monthData" :data="monthData" />
+                <ExpensesCardComponent class="h-[40%] mb-2 @4xl:h-3/5" v-if="monthData" :data="monthData" @click="this.$router.push({ path: '/home/expenses' })" />
 
                 <!-- h-2/5 flex mt-2 -->
                 <div class="flex flex-col h-3/5 mt-2 @4xl:flex-row @4xl:h-2/5">
-                    <ProductsExpensesComponent class="h-full mb-2 @4xl:!mb-0 @4xl:mr-2 @4xl:w-1/2" v-if="monthData" :data="monthData" />
-                    <OthersExpensesComponent class="h-full mt-2 @4xl:!mt-0 @4xl:ml-2 @4xl:w-1/2" v-if="monthData" :data="monthData" />
+                    <ProductsExpensesComponent class="h-full mb-2 @4xl:!mb-0 @4xl:mr-2 @4xl:w-1/2" v-if="monthData && lastMonthData" :data="monthData" :lastMonthData="lastMonthData" @click="this.$router.push({ path: '/home/expenses' })" />
+                    <OthersExpensesComponent class="h-full mt-2 @4xl:!mt-0 @4xl:ml-2 @4xl:w-1/2" v-if="monthData && lastMonthData" :data="monthData" :lastMonthData="lastMonthData" @click="this.$router.push({ path: '/home/expenses' })" />
                 </div>
             </div>
             <!-- w-2/3 ml-2 -->
@@ -36,6 +36,7 @@ export default {
     data() {
         return {
             monthData: false,
+            lastMonthData: false,
             yearData: false,
         };
     },
@@ -58,7 +59,14 @@ export default {
                 console.log(response);
             });
 
-        console.log(this.yearData);
+        axios
+            .get("http://localhost:8000/api/Entries?periodStart=" + moment().local("YYYY-MM-DD HH:mm:ss").subtract(1, "month").startOf("month").format("YYYY-MM-DD HH:mm:ss"))
+            .then((response) => {
+                this.lastMonthData = response.data;
+            })
+            .catch((response) => {
+                console.log(response);
+            });
     },
 };
 </script>

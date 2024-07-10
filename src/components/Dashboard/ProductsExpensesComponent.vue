@@ -14,10 +14,10 @@ import * as icon from "@coreui/icons";
             <div class="text-2xl">{{ costsCount }}</div>
             <div class="font-bold text-2xl text-accent @6xl:text-3xl">${{ currentCosts }}</div>
         </div>
-        <div class="flex items-center *:text-sm *:text-emerald-500">
+        <div ref="ratioprod" class="flex items-start *:text-sm">
             <div>(</div>
-            <div>17.2% &nbsp;</div>
-            <CIcon :icon="icon.cilArrowBottom" />
+            <div>{{ relation }} % &nbsp;</div>
+            <CIcon v-if="arrowIcon" :icon="arrowIcon" />
             <div>)</div>
         </div>
     </div>
@@ -29,10 +29,14 @@ export default {
         return {
             costsCount: 0,
             currentCosts: 0,
-            lastMontCosts: 0,
+
+            lastMonthCosts: 0,
+            relation: 0,
+            arrowIcon: false,
         };
     },
     props: {
+        lastMonthData: Object,
         data: Object,
     },
 
@@ -49,6 +53,29 @@ export default {
             this.currentCosts += timeCost;
             this.costsCount += timeCostsCount;
         });
+
+        this.lastMonthData.forEach((item) => {
+            let timeCost = 0;
+            item.costs.forEach((cost) => {
+                if (cost.type == "product") {
+                    timeCost += cost.amount;
+                }
+            });
+            this.lastMonthCosts += timeCost;
+        });
+
+        if (this.lastMonthCosts > this.currentCosts) {
+            this.arrowIcon = icon.cilArrowBottom;
+            this.$refs.ratioprod.classList.add("*:text-red-500");
+        } else {
+            this.arrowIcon = icon.cilArrowTop;
+            this.$refs.ratioprod.classList.add("*:text-emerald-500");
+        }
+        if (this.lastMonthCosts == 0 && this.currentCosts == 0) {
+            this.relation = 0;
+        } else {
+            this.relation = (((this.lastMonthCosts - this.currentCosts) / this.lastMonthCosts) * 100).toFixed(2);
+        }
     },
 };
 </script>
