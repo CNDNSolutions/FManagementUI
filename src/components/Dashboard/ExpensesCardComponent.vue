@@ -35,7 +35,7 @@ import { data } from "autoprefixer";
                 elements: {
                     line: {
                         color: 'red',
-                        borderWidth: 2,
+                        borderWidth: 3,
                         tension: 0.4,
                     },
                     point: { radius: 0, hitRadius: 10, hoverRadius: 4 },

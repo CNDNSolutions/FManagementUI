@@ -41,32 +41,11 @@ export default {
         };
     },
     mounted() {
-        axios
-            .get("http://localhost:8000/api/Entries/")
-            .then((response) => {
-                this.monthData = response.data;
-            })
-            .catch((response) => {
-                console.log(response);
-            });
+        let data = JSON.parse(localStorage.getItem("data"));
 
-        axios
-            .get("http://localhost:8000/api/Entries?periodStart=" + moment().local().startOf("year").format("YYYY-MM-DD HH:mm:ss"))
-            .then((response) => {
-                this.yearData = response.data;
-            })
-            .catch((response) => {
-                console.log(response);
-            });
-
-        axios
-            .get("http://localhost:8000/api/Entries?periodStart=" + moment().local("YYYY-MM-DD HH:mm:ss").subtract(1, "month").startOf("month").format("YYYY-MM-DD HH:mm:ss"))
-            .then((response) => {
-                this.lastMonthData = response.data;
-            })
-            .catch((response) => {
-                console.log(response);
-            });
+        this.monthData = data.month;
+        this.lastMonthData = data.lastMonth;
+        this.yearData = data.year;
     },
 };
 </script>

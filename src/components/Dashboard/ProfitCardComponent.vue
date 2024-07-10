@@ -13,9 +13,9 @@ import moment from "moment";
                 <div class="text-base font-light">January {{ moment().local().format("Y") }} - December, {{ moment().local().format("Y") }}</div>
             </div>
             <div class="flex [&>*+*]:ml-2 items-end">
-                <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ mapped.profit.reduce((acc, num) => acc + num, 0) }}</div>
+                <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ profit.toFixed(2) }}</div>
                 <div class="">/</div>
-                <div class="text-xl @6xl:text-2xl">(${{ mapped.profit.reduce((acc, num) => acc + num, 0) - mapped.costs.reduce((acc, num) => acc + num, 0) }})</div>
+                <div class="text-xl @6xl:text-2xl">(${{ (profit - mapped.costs.reduce((acc, num) => acc + num, 0)).toFixed(2) }})</div>
             </div>
         </div>
         <CChart
@@ -103,6 +103,7 @@ export default {
                 profit: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 costs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             },
+            profit: 0,
         };
     },
     mounted() {
@@ -112,13 +113,14 @@ export default {
 
             this.mapped.profit[this.mapped.labels.indexOf(itemMonth)] += item.profit;
 
+            this.profit += item.profit / (1 + item.markup / 100);
+
             let currentCosts = 0;
             item.costs.forEach((cost) => {
                 currentCosts += cost.amount;
             });
             this.mapped.costs[this.mapped.labels.indexOf(itemMonth)] += currentCosts;
         });
-        console.log(this.mapped);
     },
 };
 </script>
