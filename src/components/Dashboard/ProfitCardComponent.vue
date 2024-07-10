@@ -6,16 +6,16 @@ import moment from "moment";
 </script>
 
 <template>
-    <div class="w-2/3 ml-2 rounded border-1 border-border-color bg-secondary/100 flex flex-col justify-between px-3">
-        <div class="h-1/4 py-3 flex justify-between items-center">
+    <div class="rounded border-1 border-border-color bg-secondary/100 flex flex-col justify-between px-3">
+        <div class="h-1/3 py-3 flex flex-col justify-between items-start @6xl:flex-row">
             <div>
                 <div class="font-bold text-2xl">Profit</div>
                 <div class="text-base font-light">January {{ moment().local().format("Y") }} - December, {{ moment().local().format("Y") }}</div>
             </div>
             <div class="flex [&>*+*]:ml-2 items-end">
-                <div class="text-accent text-3xl font-semibold">${{ mapped.profit.reduce((acc, num) => acc + num, 0) }}</div>
-                <div class="w">/</div>
-                <div class="text-2xl">(${{ mapped.profit.reduce((acc, num) => acc + num, 0) - mapped.costs.reduce((acc, num) => acc + num, 0) }})</div>
+                <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ mapped.profit.reduce((acc, num) => acc + num, 0) }}</div>
+                <div class="">/</div>
+                <div class="text-xl @6xl:text-2xl">(${{ mapped.profit.reduce((acc, num) => acc + num, 0) - mapped.costs.reduce((acc, num) => acc + num, 0) }})</div>
             </div>
         </div>
         <CChart
@@ -40,11 +40,10 @@ import moment from "moment";
                 ],
             }"
             :options="{
-                borderSkipped: false,
                 barThickness: 'flex',
                 maxBarThickness: 8,
-                barPercentage: 0.1,
-                categoryPercentage: 0.3,
+                barPercentage: 1,
+                categoryPercentage: 0.4,
                 borderRadius: 20,
                 maintainAspectRatio: false,
                 plugins: {

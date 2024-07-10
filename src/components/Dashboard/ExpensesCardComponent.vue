@@ -6,7 +6,7 @@ import { data } from "autoprefixer";
 </script>
 
 <template>
-    <div class="h-3/5 mb-2 rounded border-1 border-border-color bg-secondary/100 hover:bg-primary/10 cursor-pointer flex flex-col justify-between">
+    <div class="rounded border-1 border-border-color bg-secondary/100 hover:bg-primary/10 cursor-pointer flex flex-col justify-between">
         <div class="w-full p-3 flex justify-between items-center">
             <div class="flex flex-col">
                 <div class="font-bold text-2xl">Expenses</div>
@@ -19,11 +19,11 @@ import { data } from "autoprefixer";
                     }}
                 </div>
             </div>
-            <div class="text-accent text-3xl font-semibold">${{ this.costs.cost.reduce((acc, num) => acc + num, 0) }}</div>
+            <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ this.costs.cost.reduce((acc, num) => acc + num, 0) }}</div>
         </div>
         <CChart
             type="line"
-            class="h-auto"
+            class="h-1/2"
             :custom-tooltips="false"
             :data="{ labels: this.costs.date, datasets: [{ label: 'Expenses', data: this.costs.cost, fill: true }] }"
             :options="{

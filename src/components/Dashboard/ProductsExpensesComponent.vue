@@ -4,20 +4,17 @@ import * as icon from "@coreui/icons";
 </script>
 
 <template>
-    <div class="flex flex-col rounded border-1 border-border-color bg-secondary/100 p-4 hover:bg-primary/10 cursor-pointer">
+    <div class="flex flex-col justify-between rounded border-1 border-border-color bg-secondary/100 p-3 hover:bg-primary/10 cursor-pointer">
         <div class="flex justify-between">
-            <div class="font-bold text-2xl">Products</div>
+            <div class="font-bold text-xl text-secondary-text">Products</div>
             <CIcon :icon="icon.cilTruck" size="xxl" class="border-1 box-content p-1 rounded border-primary bg-primary/20" />
         </div>
 
-        <div class="flex flex-col mt-1">
-            <div class="flex items-end">
-                <div class="text-2xl">{{ costsCount }}</div>
-                <div class="text-xl ml-2">Oreders for</div>
-            </div>
-            <div class="font-bold text-3xl text-accent">${{ currentCosts }}</div>
+        <div class="flex justify-between items-center">
+            <div class="text-2xl">{{ costsCount }}</div>
+            <div class="font-bold text-2xl text-accent @6xl:text-3xl">${{ currentCosts }}</div>
         </div>
-        <div class="mt-auto flex items-center *:text-sm *:text-emerald-500">
+        <div class="flex items-center *:text-sm *:text-emerald-500">
             <div>(</div>
             <div>17.2% &nbsp;</div>
             <CIcon :icon="icon.cilArrowBottom" />
