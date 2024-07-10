@@ -1,7 +1,10 @@
 import "./assets/main.css";
 import "@coreui/coreui/dist/css/coreui.min.css";
+import "v-calendar/style.css";
 
 import { createWebHistory, createRouter } from "vue-router";
+
+import VCalendar from "v-calendar";
 
 import { createApp } from "vue";
 
@@ -23,4 +26,4 @@ const router = createRouter({
     ],
 });
 
-createApp(App).use(router).mount("#app");
+createApp(App).use(router).use(VCalendar, {}).mount("#app");

@@ -6,7 +6,7 @@ import moment from "moment";
 </script>
 
 <template>
-    <div class="rounded border-1 border-border-color bg-secondary/100 flex flex-col justify-between px-3">
+    <div class="rounded border-2 border-border-color bg-secondary/100 flex flex-col justify-between px-3">
         <div class="h-1/3 py-3 flex flex-col justify-between items-start @6xl:flex-row">
             <div>
                 <div class="font-bold text-2xl">Profit</div>
