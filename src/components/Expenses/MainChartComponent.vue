@@ -1,5 +1,5 @@
 <script setup>
-import DefaultChartComponent from "@/components/DefaultChartComponent.vue";
+import LineChartComponent from "@/components/LineChartComponent.vue";
 import * as icon from "@coreui/icons";
 import CIcon from "@coreui/icons-vue";
 import { CChart } from "@coreui/vue-chartjs";
@@ -12,8 +12,8 @@ import axios from "axios";
 <template>
     <div class="flex flex-col">
         <div class="flex justify-between mb-2 items-center h-9">
-            <div class="">
-                <VDatePicker v-model="potentialDate" @did-move="setPotentialDate($event[0].monthComps.firstDayOfMonth)" :is-dark="true">
+            <div>
+                <VDatePicker v-model="this.potentialDate" @did-move="setPotentialDate($event[0].monthComps.firstDayOfMonth)" :is-dark="true">
                     <template #default="{ togglePopover }">
                         <div
                             class="flex justify-center items-center px-3 text-lg rounded max-h-9 h-9 min-h-9 border-2 border-border-color hover:bg-primary/10 cursor-pointer active:bg-primary/20"
@@ -41,16 +41,15 @@ import axios from "axios";
                 <div ref="expensesViewOthersButton" class="rounded-r border-r" @click="changeChartType('others')" v-bind:class="chartType == 'others' ? 'bg-secondary/100' : ''">Others</div>
             </div>
         </div>
-        <div class="h-[400px] flex rounded border-2 border-border-color bg-secondary/100 hover:bg-primary/10 cursor-pointer">
-            <DefaultChartComponent
-                :key="reload"
+        <div class="h-[400px] flex rounded mt-2 border-2 border-border-color bg-secondary/100 hover:bg-primary/10 cursor-pointer">
+            <LineChartComponent
                 class="h-full w-full"
                 :data="{ labels: this.costs.date, datasets: [{ label: 'Expenses', data: this.costs.cost[this.chartType], fill: true }] }"
-                :config="{
+                :options="{
+                    maintainAspectRatio: false,
                     backgroundColor: getStyle('--primary-transparent'),
                     borderColor: getStyle('--primary'),
                     plugins: { legend: { display: false } },
-                    maintainAspectRatio: false,
                     scales: {
                         x: {
                             afterFit: (axis) => {
@@ -73,6 +72,9 @@ import axios from "axios";
                         },
 
                         y: {
+                            afterFit: (axis) => {
+                                axis.paddingTop = 6;
+                            },
                             min: 0,
                             grid: {
                                 color: getStyle('--border-color'),
@@ -117,13 +119,11 @@ export default {
 
             costs: { date: [], cost: { product: [], others: [] } },
 
-            reload: true,
             loadedData: {},
         };
     },
     created() {
         this.setCosts(this.monthData);
-        console.log(this.costs);
     },
     methods: {
         setPotentialDate(date) {
@@ -162,13 +162,11 @@ export default {
         },
         loadData() {
             this.dataLoaded = false;
-            console.log(this.date);
             axios
                 .get("http://localhost:8000/api/Entries?periodStart=" + this.date + "&periodEnd=" + moment(this.date).endOf("month").format("YYYY-MM-DD HH:mm:ss"))
                 .then((response) => {
                     this.loadedData = response.data;
                     this.setCosts(this.loadedData);
-                    this.reload = !this.reload;
                 })
                 .catch((response) => {
                     console.log(response);

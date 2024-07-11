@@ -6,7 +6,7 @@ import TitlePathComponent from "@/components/TitlePathComponent.vue";
 <template>
     <div class="w-5/6 @container" v-if="monthData && yearData && lastMonthData">
         <TitlePathComponent />
-        <div class="w-full h-[500px]">
+        <div class="w-full">
             <MainChartComponent class="w-full h-full" :monthData="monthData" />
         </div>
     </div>

@@ -1,5 +1,5 @@
 <script setup>
-import DefaultChartComponent from "@/components/DefaultChartComponent.vue";
+import LineChartComponent from "@/components/LineChartComponent.vue";
 import { CChart } from "@coreui/vue-chartjs";
 import { getStyle } from "@coreui/utils";
 import moment from "moment";
@@ -22,7 +22,24 @@ import { data } from "autoprefixer";
             </div>
             <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ this.costs.cost.reduce((acc, num) => acc + num, 0) }}</div>
         </div>
-        <DefaultChartComponent class="h-1/2" :data="{ labels: this.costs.date, datasets: [{ label: 'Expenses', data: this.costs.cost, fill: true }] }" />
+        <LineChartComponent
+            class="h-1/2"
+            :data="{ labels: this.costs.date, datasets: [{ label: 'Expenses', data: this.costs.cost, fill: true }] }"
+            :options="{
+                maintainAspectRatio: false,
+                backgroundColor: getStyle('--primary-transparent'),
+                borderColor: getStyle('--primary'),
+                plugins: { legend: { display: false } },
+                maintainAspectRatio: false,
+                scales: { x: { border: { display: false }, display: false }, y: { display: false } },
+                elements: {
+                    line: {
+                        borderWidth: 3,
+                        tension: 0.4,
+                    },
+                    point: { radius: 0, hitRadius: 10, hoverRadius: 4 },
+                },
+            }" />
     </div>
 </template>
 
@@ -36,7 +53,7 @@ export default {
             costs: { cost: [], date: [] },
         };
     },
-    mounted() {
+    created() {
         this.data.forEach((item) => {
             let timeCost = 0;
             item.costs.forEach((cost) => {
