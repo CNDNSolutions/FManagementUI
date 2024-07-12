@@ -9,7 +9,7 @@ import moment from "moment";
     <div class="flex min-h-screen overflow-hidden">
         <SidebarComponent />
         <div class="max-h-screen overflow-auto w-full bg-background">
-            <div class="w-full flex justify-center mt-14 mb-16 *:max-w-[1400px]">
+            <div class="w-full flex justify-center mt-14 mb-16 *:max-w-[1400px] pb-[500px]">
                 <RouterView v-if="loaded" :key="reload" />
             </div>
         </div>
@@ -42,7 +42,12 @@ export default {
                             .then((response) => {
                                 data.year = response.data;
                                 axios
-                                    .get("http://localhost:8000/api/Entries?periodStart=" + moment().local("YYYY-MM-DD HH:mm:ss").subtract(1, "month").startOf("month").format("YYYY-MM-DD HH:mm:ss"))
+                                    .get(
+                                        "http://localhost:8000/api/Entries?periodStart=" +
+                                            moment().local("YYYY-MM-DD HH:mm:ss").subtract(1, "month").startOf("month").format("YYYY-MM-DD HH:mm:ss") +
+                                            "&periodEnd=" +
+                                            moment().local("YYYY-MM-DD HH:mm:ss").subtract(1, "month").endOf("month").format("YYYY-MM-DD HH:mm:ss")
+                                    )
                                     .then((response) => {
                                         data.lastMonth = response.data;
                                         data.expires = moment().local().add(2, "minute").unix();

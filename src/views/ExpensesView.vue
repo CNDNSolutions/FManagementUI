@@ -1,13 +1,21 @@
 <script setup>
+import CalendarComponent from "@/components/Expenses/CalendarComponent.vue";
+import ExpensesComponent from "@/components/Expenses/ExpensesComponent.vue";
 import MainChartComponent from "@/components/Expenses/MainChartComponent.vue";
 import TitlePathComponent from "@/components/TitlePathComponent.vue";
+import ExpensesListComponent from "@/components/Expenses/ExpensesListComponent.vue";
+import axios from "axios";
+import moment from "moment";
 </script>
 
 <template>
     <div class="w-5/6 @container" v-if="monthData && yearData && lastMonthData">
         <TitlePathComponent />
-        <div class="w-full">
-            <MainChartComponent class="w-full h-full" :monthData="monthData" />
+        <div class="w-full flex flex-col [&>*+*]:mt-4">
+            <CalendarComponent ref="calendar" :defaultData="monthData" class="w-fit" @dateUpdated="updateData()" />
+            <MainChartComponent class="w-full h-[500px]" :defaultData="monthData" ref="mainChart" />
+            <ExpensesComponent class="h-[120px]" :defaultData="monthData" ref="expenses" />
+            <ExpensesListComponent :defaultData="monthData" ref="expensesList" />
         </div>
     </div>
 </template>
@@ -27,6 +35,21 @@ export default {
         this.monthData = data.month;
         this.lastMonthData = data.lastMonth;
         this.yearData = data.year;
+    },
+    methods: {
+        updateData() {
+            let date = this.$refs.calendar.getDate();
+            axios
+                .get("http://localhost:8000/api/Entries?periodStart=" + moment(date.start).format("YYYY-MM-DD HH:mm:ss") + "&periodEnd=" + moment(date.end).format("YYYY-MM-DD HH:mm:ss"))
+                .then((response) => {
+                    this.$refs.mainChart.setCosts(response.data);
+                    this.$refs.expenses.setData(response.data);
+                    this.$refs.expensesList.setData(response.data);
+                })
+                .catch((response) => {
+                    console.log(response);
+                });
+        },
     },
 };
 </script>
