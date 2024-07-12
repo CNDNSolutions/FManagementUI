@@ -3,9 +3,9 @@
         <div class="flex justify-between mb-2 items-start">
             <div>
                 <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
-                    <div class="rounded-l border-l" @click="setCosts(false, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
-                    <div class="border-y" @click="setCosts(false, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
-                    <div class="rounded-r border-r" @click="setCosts(false, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
+                    <div class="rounded-l border-l" @click="setCosts(false, false, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
+                    <div class="border-y" @click="setCosts(false, false, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
+                    <div class="rounded-r border-r" @click="setCosts(false, false, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
                 </div>
             </div>
 
@@ -184,10 +184,12 @@ export default {
 
     props: {
         defaultData: Object,
+        defaultDate: Object,
     },
     data() {
         return {
             data: {},
+            date: {},
             chart: "line",
             chartGroup: "day",
             chartType: "all",
@@ -196,12 +198,15 @@ export default {
         };
     },
     mounted() {
-        this.setCosts(this.defaultData);
+        this.setCosts(this.defaultData, this.defaultDate);
     },
     methods: {
         getStyle,
 
-        setCosts(data, group) {
+        setCosts(data, date, group) {
+            if (!date) {
+                date = this.date;
+            }
             if (!data) {
                 data = this.data;
             }
@@ -210,8 +215,9 @@ export default {
             }
             this.data = data;
             this.chartGroup = group;
+            this.date = date;
 
-            let costs = this.defineCosts(data, group);
+            let costs = this.defineCosts(data, date, group);
 
             if (costs.chart != this.chart) {
                 this.chart = costs.chart;
@@ -221,17 +227,17 @@ export default {
             }
         },
 
-        defineCosts(data, group) {
+        defineCosts(data, date, group) {
             let costs = { date: [], amount: { all: [], product: [], others: [] } };
 
             let days =
-                moment(data[0].date)
+                moment(date.start)
                     .startOf(group == "day" ? "day" : group == "month" ? "month" : "year")
-                    .diff(moment(data[data.length - 1].date).endOf(group == "day" ? "day" : group == "month" ? "month" : "year"), group == "day" ? "day" : group == "month" ? "month" : "year") * -1;
+                    .diff(moment(date.end).endOf(group == "day" ? "day" : group == "month" ? "month" : "year"), group == "day" ? "day" : group == "month" ? "month" : "year") * -1;
 
             for (let index = 0; index <= days; index++) {
                 costs.date.push(
-                    moment(data[0].date)
+                    moment(date.start)
                         .add(index, group == "day" ? "day" : group == "month" ? "month" : "year")
                         .format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY")
                 );
@@ -240,7 +246,6 @@ export default {
             costs.amount.product = new Array(days + 1).fill(0);
             costs.amount.all = new Array(days + 1).fill(0);
             costs.amount.others = new Array(days + 1).fill(0);
-
             let chart = "line";
             if (days + 1 == 1) {
                 chart = "bar";

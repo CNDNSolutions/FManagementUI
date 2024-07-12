@@ -17,7 +17,7 @@ import moment from "moment";
         <div class="w-full h-[1000px] flex flex-col @6xl:flex-row @6xl:h-[500px]">
             <!-- w-1/3 flex flex-col mr-2 -->
             <div class="flex flex-col h-2/3 mb-2 @6xl:h-full @6xl:mr-2 @6xl:w-1/3">
-                <ExpensesCardComponent class="h-[40%] mb-2 @4xl:h-3/5" v-if="monthData" :data="monthData" @click="this.$router.push({ path: '/home/expenses' })" />
+                <ExpensesCardComponent class="h-[40%] mb-2 @4xl:h-3/5" v-if="monthData" :defaultData="monthData" :defaultDate="{ start: moment(moment.now()).startOf('month'), end: moment(moment.now()).endOf('month') }" @click="this.$router.push({ path: '/home/expenses' })" />
 
                 <!-- h-2/5 flex mt-2 -->
                 <div class="flex flex-col h-3/5 mt-2 @4xl:flex-row @4xl:h-2/5">

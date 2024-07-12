@@ -13,7 +13,7 @@ import moment from "moment";
         <TitlePathComponent />
         <div class="w-full flex flex-col [&>*+*]:mt-4">
             <CalendarComponent ref="calendar" :defaultData="monthData" class="w-fit" @dateUpdated="updateData()" />
-            <MainChartComponent class="w-full h-[500px]" :defaultData="monthData" ref="mainChart" />
+            <MainChartComponent class="w-full h-[500px]" :defaultData="monthData" :defaultDate="{ start: moment(this.monthData[0].date).startOf('day'), end: moment(this.monthData[this.monthData.length - 1].date).startOf('day') }" ref="mainChart" />
             <ExpensesComponent class="h-[120px]" :defaultData="monthData" ref="expenses" />
             <ExpensesListComponent :defaultData="monthData" ref="expensesList" />
         </div>
@@ -40,9 +40,9 @@ export default {
         updateData() {
             let date = this.$refs.calendar.getDate();
             axios
-                .get("http://localhost:8000/api/Entries?periodStart=" + moment(date.start).format("YYYY-MM-DD HH:mm:ss") + "&periodEnd=" + moment(date.end).format("YYYY-MM-DD HH:mm:ss"))
+                .get("http://localhost:8000/api/Entries?periodStart=" + moment(date.start).startOf("day").format("YYYY-MM-DD HH:mm:ss") + "&periodEnd=" + moment(date.end).endOf("day").format("YYYY-MM-DD HH:mm:ss"))
                 .then((response) => {
-                    this.$refs.mainChart.setCosts(response.data);
+                    this.$refs.mainChart.setCosts(response.data, date);
                     this.$refs.expenses.setData(response.data);
                     this.$refs.expensesList.setData(response.data);
                 })

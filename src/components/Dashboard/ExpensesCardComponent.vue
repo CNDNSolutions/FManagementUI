@@ -12,19 +12,15 @@ import { data } from "autoprefixer";
             <div class="flex flex-col">
                 <div class="font-bold text-2xl">Expenses</div>
                 <div class="text-base font-light">
-                    {{ moment(moment.utc(this.data[0].date, "YYYY-MM-DD HH:mm:ss").toDate()).local().format("MMMM") }} {{ moment(moment.utc(this.data[0].date, "YYYY-MM-DD HH:mm:ss").toDate()).local().format("Y") }} {{ moment(moment.utc(this.data[0].date, "YYYY-MM-DD HH:mm:ss").toDate()).local().format("D") }} -
-                    {{
-                        moment(moment.utc(this.data[this.data.length - 1].date, "YYYY-MM-DD HH:mm:ss").toDate())
-                            .local()
-                            .format("D")
-                    }}
+                    {{ moment(this.defaultData[0].date).format("MMMM") }} {{ moment(this.defaultData[0].date).format("Y") }} {{ moment(this.defaultData[0].date).format("D") }} -
+                    {{ moment(this.defaultData[this.defaultData.length - 1].date).format("D") }}
                 </div>
             </div>
-            <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ this.costs.cost.reduce((acc, num) => acc + num, 0) }}</div>
+            <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ this.costs.amount.reduce((acc, num) => acc + num, 0) }}</div>
         </div>
         <LineChartComponent
             class="h-1/2"
-            :data="{ labels: this.costs.date, datasets: [{ label: 'Expenses', data: this.costs.cost, fill: true }] }"
+            :data="{ labels: this.costs.date, datasets: [{ label: 'Expenses', data: this.costs.amount, fill: true }] }"
             :options="{
                 maintainAspectRatio: false,
                 backgroundColor: getStyle('--primary-transparent'),
@@ -46,23 +42,54 @@ import { data } from "autoprefixer";
 <script>
 export default {
     props: {
-        data: Object,
+        defaultData: Object,
+        defaultDate: Object,
     },
     data() {
         return {
-            costs: { cost: [], date: [] },
+            costs: { date: [], amount: [] },
         };
     },
     created() {
-        this.data.forEach((item) => {
-            let timeCost = 0;
-            item.costs.forEach((cost) => {
-                timeCost = timeCost + cost.amount;
+        this.setCosts(this.defaultData, this.defaultDate);
+    },
+    methods: {
+        setCosts(data, date) {
+            if (!data) {
+                data = this.defaultData;
+            }
+            if (!date) {
+                date = this.defaultDate;
+            }
+
+            let costs = this.defineCosts(data, date);
+
+            if (costs != this.costs) {
+                this.costs = costs;
+            }
+        },
+        defineCosts(data, date) {
+            let costs = { date: [], amount: [] };
+
+            let days = moment(date.start).startOf("day").diff(moment(date.end).endOf("day"), "day") * -1;
+
+            for (let index = 0; index <= days; index++) {
+                costs.date.push(moment(date.start).add(index, "day").format("DD MMM"));
+            }
+
+            costs.amount = new Array(days + 1).fill(0);
+
+            data.forEach((item) => {
+                let allCost = 0;
+                item.costs.forEach((cost) => {
+                    allCost += cost.amount;
+                });
+                let date = costs.date.indexOf(moment(item.date).format("DD MMM"));
+                costs.amount[date] += allCost;
             });
-            this.costs.cost.push(timeCost);
-            let date = moment(moment.utc(item.date, "YYYY-MM-DD HH:mm:ss").toDate()).local();
-            this.costs.date.push(date.format("D") + " " + date.format("MMM"));
-        });
+
+            return costs;
+        },
     },
 };
 </script>
