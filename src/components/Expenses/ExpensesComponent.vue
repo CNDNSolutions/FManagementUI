@@ -2,11 +2,11 @@
     <div>
         <div class="w-full min-h-fit h-full flex *:w-1/3 justify-between">
             <!-- all -->
-            <div class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
+            <div title="Total expenses" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
                 <div class="flex justify-between">
-                    <div class="font-bold text-xl text-secondary-text">All</div>
+                    <div class="font-bold text-xl text-secondary-text">Total</div>
                     <div class="bg-primary/20 border-1 border-primary/50 rounded ml-2 h-9 w-9 p-1">
-                        <CIcon :icon="icon.cilCheckAlt" class="h-full w-full" size="xxl" />
+                        <CIcon :icon="icon.cilMoney" class="h-full w-full" size="xxl" />
                     </div>
                 </div>
                 <div class="flex items-center">
@@ -26,7 +26,7 @@
                     :value="definedData.profit.net == 0 ? 100 : ((definedData.costs.all.amount / definedData.profit.net) * 100).toFixed(2)" />
             </div>
             <!-- products -->
-            <div class="border-2 mx-4 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
+            <div title="Product expenses" class="border-2 mx-4 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
                 <div class="flex justify-between">
                     <div class="font-bold text-xl text-secondary-text">Product</div>
                     <div class="bg-primary/20 border-1 border-primary/50 rounded ml-2 h-9 w-9 p-1">
@@ -57,7 +57,7 @@
                     :value="definedData.profit.net == 0 ? 100 : ((definedData.costs.product.amount / definedData.profit.net) * 100).toFixed(2)" />
             </div>
             <!-- other -->
-            <div class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
+            <div title="Other expenses" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
                 <div class="flex justify-between">
                     <div class="font-bold text-xl text-secondary-text">Other</div>
                     <div class="bg-primary/20 border-1 border-primary/50 rounded ml-2 h-9 w-9 p-1">
