@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded border-2 border-border-color bg-secondary/100">
+    <div class="[&>*>*]:text-xs @lg:[&>*>*]:text-sm @xl:[&>*>*]:text-base rounded border-2 border-border-color bg-secondary/100">
         <div class="h-9 border-b-2 hover:*:bg-primary/5 *:h-full border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
             <!-- <div class="!w-fit min-w-9 px-2">ID</div> -->
             <div class="flex items-center justify-center" @click="sortList('Date')">

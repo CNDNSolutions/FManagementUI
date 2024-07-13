@@ -12,7 +12,7 @@ import moment from "moment";
     <div class="w-5/6 @container" v-if="monthData && yearData && lastMonthData">
         <TitlePathComponent />
         <div class="w-full flex flex-col [&>*+*]:mt-4">
-            <CalendarComponent ref="calendar" :defaultData="monthData" class="w-fit" @dateUpdated="updateData()" />
+            <CalendarComponent ref="calendar" :defaultData="monthData" class="w-full @lg:w-fit" @dateUpdated="updateData()" />
             <ProfitChartComponent class="w-full h-[500px]" :defaultData="monthData" :defaultDate="{ start: moment(this.monthData[0].date).startOf('day'), end: moment(this.monthData[this.monthData.length - 1].date).startOf('day') }" ref="profitChart" />
             <ProfitComponent :defaultData="monthData" ref="profit" />
             <ProfitListComponent :defaultData="monthData" ref="profitList" />
