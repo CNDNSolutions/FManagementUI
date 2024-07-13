@@ -14,7 +14,7 @@ import moment from "moment";
         <div class="w-full flex flex-col [&>*+*]:mt-4">
             <CalendarComponent ref="calendar" :defaultData="monthData" class="w-fit" @dateUpdated="updateData()" />
             <MainChartComponent class="w-full h-[500px]" :defaultData="monthData" :defaultDate="{ start: moment(this.monthData[0].date).startOf('day'), end: moment(this.monthData[this.monthData.length - 1].date).startOf('day') }" ref="mainChart" />
-            <ExpensesComponent class="h-[120px]" :defaultData="monthData" ref="expenses" />
+            <ExpensesComponent :defaultData="monthData" ref="expenses" />
             <ExpensesListComponent :defaultData="monthData" ref="expensesList" />
         </div>
     </div>
