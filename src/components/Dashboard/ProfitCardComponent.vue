@@ -10,12 +10,12 @@ import moment from "moment";
         <div class="h-1/3 py-3 flex flex-col justify-between items-start @6xl:flex-row">
             <div>
                 <div class="font-bold text-2xl">Profit</div>
-                <div class="text-base font-light">January {{ moment().local().format("Y") }} - December, {{ moment().local().format("Y") }}</div>
+                <div class="text-base font-light" title="Period">January {{ moment().local().format("Y") }} - December, {{ moment().local().format("Y") }}</div>
             </div>
             <div class="flex [&>*+*]:ml-2 items-end">
-                <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ profit.toFixed(2) }}</div>
+                <div class="text-accent text-2xl font-semibold @6xl:text-3xl" title="Total profit">${{ profit.toFixed(2) }}</div>
                 <div class="">/</div>
-                <div class="text-xl @6xl:text-2xl">(${{ (profit - mapped.costs.reduce((acc, num) => acc + num, 0)).toFixed(2) }})</div>
+                <div class="text-xl @6xl:text-2xl" title="Net profit">(${{ (profit - mapped.costs.reduce((acc, num) => acc + num, 0)).toFixed(2) }})</div>
             </div>
         </div>
         <CChart
