@@ -11,13 +11,13 @@ import * as icon from "@coreui/icons";
         </div>
 
         <div class="flex justify-between items-center">
-            <div class="text-2xl">{{ costsCount }}</div>
-            <div class="font-bold text-2xl text-accent @6xl:text-3xl">${{ currentCosts }}</div>
+            <div class="text-2xl">{{ costs.currentMonth.count }}</div>
+            <div class="font-bold text-2xl text-accent @6xl:text-3xl">${{ costs.currentMonth.amount }}</div>
         </div>
-        <div ref="ratioprod" class="flex items-start *:text-sm">
+        <div v-bind:class="costs.lastMonth.amount > costs.currentMonth.amount ? ' *:text-emerald-500 ' : ' *:text-red-500'" class="flex items-start *:text-sm">
             <div>(</div>
-            <div>{{ relation }} % &nbsp;</div>
-            <CIcon v-if="arrowIcon" :icon="arrowIcon" />
+            <div>{{ costs.lastMonth.amount == 0 ? 100 : (((costs.currentMonth.amount - costs.lastMonth.amount) / costs.lastMonth.amount) * 100).toFixed(2).toString().replace("-", "") }} % &nbsp;</div>
+            <CIcon v-bind:icon="costs.lastMonth.amount > costs.currentMonth.amount ? icon.cilArrowBottom : icon.cilArrowTop" />
             <div>)</div>
         </div>
     </div>
@@ -27,55 +27,48 @@ import * as icon from "@coreui/icons";
 export default {
     data() {
         return {
-            costsCount: 0,
-            currentCosts: 0,
-
-            lastMonthCosts: 0,
-            relation: 0,
-            arrowIcon: false,
+            costs: {
+                currentMonth: {
+                    count: 0,
+                    amount: 0,
+                },
+                lastMonth: {
+                    amount: 0,
+                    count: 0,
+                },
+            },
         };
     },
     props: {
-        lastMonthData: Object,
-        data: Object,
+        defaultData: Object,
     },
 
     mounted() {
-        this.data.forEach((item) => {
-            let timeCost = 0;
-            let timeCostsCount = 0;
-            item.costs.forEach((cost) => {
-                if (cost.type == "product") {
-                    timeCost += cost.amount;
-                    timeCostsCount += 1;
-                }
-            });
-            this.currentCosts += timeCost;
-            this.costsCount += timeCostsCount;
-        });
+        this.setCosts(this.defaultData);
+    },
+    methods: {
+        setCosts(data) {
+            if (!data) {
+                data = this.defaultData;
+            }
 
-        this.lastMonthData.forEach((item) => {
-            let timeCost = 0;
-            item.costs.forEach((cost) => {
-                if (cost.type == "product") {
-                    timeCost += cost.amount;
-                }
-            });
-            this.lastMonthCosts += timeCost;
-        });
+            this.costs.currentMonth = this.defineCosts(data.currentMonth);
+            this.costs.lastMonth = this.defineCosts(data.lastMonth);
+        },
+        defineCosts(data) {
+            let costs = { amount: 0, count: 0 };
 
-        if (this.lastMonthCosts > this.currentCosts) {
-            this.arrowIcon = icon.cilArrowBottom;
-            this.$refs.ratioprod.classList.add("*:text-red-500");
-        } else {
-            this.arrowIcon = icon.cilArrowTop;
-            this.$refs.ratioprod.classList.add("*:text-emerald-500");
-        }
-        if (this.lastMonthCosts == 0 && this.currentCosts == 0) {
-            this.relation = 0;
-        } else {
-            this.relation = (((this.lastMonthCosts - this.currentCosts) / this.lastMonthCosts) * 100).toFixed(2);
-        }
+            data.forEach((item) => {
+                item.costs.forEach((cost) => {
+                    if (cost.type == "product") {
+                        costs.amount += cost.amount;
+                        costs.count += 1;
+                    }
+                });
+            });
+
+            return costs;
+        },
     },
 };
 </script>

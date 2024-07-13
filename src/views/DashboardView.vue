@@ -21,8 +21,8 @@ import moment from "moment";
 
                 <!-- h-2/5 flex mt-2 -->
                 <div class="flex flex-col h-3/5 mt-2 @4xl:flex-row @4xl:h-2/5">
-                    <ProductsExpensesComponent class="h-full mb-2 @4xl:!mb-0 @4xl:mr-2 @4xl:w-1/2" v-if="monthData && lastMonthData" :data="monthData" :lastMonthData="lastMonthData" @click="this.$router.push({ path: '/home/expenses' })" />
-                    <OthersExpensesComponent class="h-full mt-2 @4xl:!mt-0 @4xl:ml-2 @4xl:w-1/2" v-if="monthData && lastMonthData" :data="monthData" :lastMonthData="lastMonthData" @click="this.$router.push({ path: '/home/expenses' })" />
+                    <ProductsExpensesComponent class="h-full mb-2 @4xl:!mb-0 @4xl:mr-2 @4xl:w-1/2" v-if="monthData && lastMonthData" :defaultData="{ currentMonth: monthData, lastMonth: lastMonthData }" @click="this.$router.push({ path: '/home/expenses' })" />
+                    <OthersExpensesComponent class="h-full mt-2 @4xl:!mt-0 @4xl:ml-2 @4xl:w-1/2" v-if="monthData && lastMonthData" :defaultData="{ currentMonth: monthData, lastMonth: lastMonthData }" @click="this.$router.push({ path: '/home/expenses' })" />
                 </div>
             </div>
             <!-- w-2/3 ml-2 -->
