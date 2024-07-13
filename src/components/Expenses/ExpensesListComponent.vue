@@ -107,7 +107,7 @@ export default {
                     };
 
                     newDefinedDataEl.profit.total = item.profit;
-                    newDefinedDataEl.profit.net = item.profit / (1 + item.markup / 100);
+                    newDefinedDataEl.profit.net = item.profit - item.profit / (1 + item.markup / 100);
                     newDefinedDataEl.cost.date = moment(item.date).format("D MMMM YYYY");
                     newDefinedDataEl.cost.type = cost.type;
                     newDefinedDataEl.cost.amount = cost.amount;
