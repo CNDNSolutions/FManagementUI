@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded border-2 border-border-color bg-secondary/100">
+    <div class="[&>*>*]:text-xs @lg:[&>*>*]:text-sm @xl:[&>*>*]:text-base rounded border-2 border-border-color bg-secondary/100">
         <div class="h-9 border-b-2 hover:*:bg-primary/5 *:h-full border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
             <!-- <div class="!w-fit min-w-9 px-2">ID</div> -->
             <div class="flex items-center justify-center" @click="sortList('Date')">
@@ -14,7 +14,7 @@
                 <div>Type</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Type' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="flex items-center justify-center" @click="sortList('Description')">
+            <div class="@lg:!flex items-center justify-center !hidden" @click="sortList('Description')">
                 <div>Description</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Description' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
@@ -29,7 +29,7 @@
             <div :title="item.cost.date">{{ item.cost.date }}</div>
             <div :title="'$' + item.cost.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')">${{ item.cost.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
             <div :title="item.cost.type.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '')">{{ item.cost.type.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
-            <div class="!block" :title="item.cost.description">{{ item.cost.description }}</div>
+            <div class="!hidden @lg:!block" :title="item.cost.description">{{ item.cost.description }}</div>
             <div :title="item.cost.expensesProfit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + '%'">{{ item.cost.expensesProfit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}%</div>
         </div>
     </div>

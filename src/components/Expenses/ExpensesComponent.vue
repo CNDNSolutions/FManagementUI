@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="w-full min-h-fit h-full flex *:w-1/3 justify-between">
+        <div class="w-full min-h-fit h-full flex @2xl:*:w-1/3 @2xl:[&>*+*]:ml-4 @2xl:[&>*+*]:!mt-0 @2xl:flex-row justify-between flex-col *:w-full [&>*+*]:!mt-4">
             <!-- total -->
             <div title="Total expenses" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
                 <div class="flex justify-between">
@@ -39,7 +39,7 @@
                     :value="definedData.profit.net == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2)" />
             </div>
             <!-- products -->
-            <div title="Product expenses" class="border-2 mx-4 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
+            <div title="Product expenses" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
                 <div class="flex justify-between">
                     <div class="font-bold text-xl text-secondary-text">Product</div>
                     <div class="bg-primary/20 border-1 border-primary/50 rounded ml-2 h-9 w-9 p-1">

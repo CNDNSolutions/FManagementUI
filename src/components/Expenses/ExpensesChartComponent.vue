@@ -1,20 +1,16 @@
 <template>
     <div class="flex flex-col">
-        <div class="flex justify-between mb-2 items-start">
-            <div>
-                <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
-                    <div class="rounded-l border-l" @click="setCosts(false, false, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
-                    <div class="border-y" @click="setCosts(false, false, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
-                    <div class="rounded-r border-r" @click="setCosts(false, false, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
-                </div>
+        <div class="flex flex-col *:w-full mb-2 [&>*>*]:w-full [&>*+*]:mt-2 justify-between items-start @lg:flex-row @lg:*:w-fit @lg:[&>*>*]:w-fit @lg:[&>*+*]:mt-0 @lg:[&>*+*]:ml-2">
+            <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
+                <div class="rounded-l border-l" @click="setCosts(false, false, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
+                <div class="border-y" @click="setCosts(false, false, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
+                <div class="rounded-r border-r" @click="setCosts(false, false, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
             </div>
 
-            <div>
-                <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Expenses type">
-                    <div class="rounded-l border-l" @click="chartType = 'total'" v-bind:class="chartType == 'total' ? 'bg-secondary/100' : ''">Total</div>
-                    <div class="border-y" @click="chartType = 'product'" v-bind:class="chartType == 'product' ? 'bg-secondary/100' : ''">Products</div>
-                    <div class="rounded-r border-r" @click="chartType = 'other'" v-bind:class="chartType == 'other' ? 'bg-secondary/100' : ''">Other</div>
-                </div>
+            <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Expenses type">
+                <div class="rounded-l border-l" @click="chartType = 'total'" v-bind:class="chartType == 'total' ? 'bg-secondary/100' : ''">Total</div>
+                <div class="border-y" @click="chartType = 'product'" v-bind:class="chartType == 'product' ? 'bg-secondary/100' : ''">Products</div>
+                <div class="rounded-r border-r" @click="chartType = 'other'" v-bind:class="chartType == 'other' ? 'bg-secondary/100' : ''">Other</div>
             </div>
         </div>
         <div class="flex flex-grow rounded border-2 border-border-color bg-secondary/100">
