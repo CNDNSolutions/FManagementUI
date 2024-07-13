@@ -10,14 +10,21 @@
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <div class="font-semibold text-xl">{{ definedData.costs.total.count }}</div>
+                    <div class="font-semibold text-xl">{{ definedData.costs.total.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
                     <div class="mx-2">/</div>
-                    <div class="text-accent font-semibold text-2xl">${{ definedData.costs.total.amount }}</div>
+                    <div class="text-accent font-semibold text-2xl">${{ definedData.costs.total.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
                 </div>
                 <div class="flex justify-between">
                     <div class="text-sm text-emerald-500">0%</div>
                     <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.total.amount ? 'text-emerald-500' : 'text-red-500'">
-                        {{ definedData.profit.net == 0 ? definedData.costs.total.amount : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2) }}%
+                        {{
+                            definedData.profit.net == 0
+                                ? definedData.costs.total.amount
+                                : ((definedData.costs.total.amount / definedData.profit.net) * 100)
+                                      .toFixed(2)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                        }}%
                     </div>
                 </div>
                 <CProgress
@@ -40,14 +47,21 @@
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <div class="font-semibold text-xl">{{ definedData.costs.product.count }}</div>
+                    <div class="font-semibold text-xl">{{ definedData.costs.product.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
                     <div class="mx-2">/</div>
-                    <div class="text-accent font-semibold text-2xl">${{ definedData.costs.product.amount }}</div>
+                    <div class="text-accent font-semibold text-2xl">${{ definedData.costs.product.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
                 </div>
                 <div class="flex justify-between">
                     <div class="text-sm text-emerald-500">0%</div>
                     <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.total.amount ? 'text-emerald-500' : 'text-red-500'">
-                        {{ definedData.profit.net == 0 ? definedData.costs.product.amount : ((definedData.costs.product.amount / definedData.profit.net) * 100).toFixed(2) }}%
+                        {{
+                            definedData.profit.net == 0
+                                ? definedData.costs.product.amount
+                                : ((definedData.costs.product.amount / definedData.profit.net) * 100)
+                                      .toFixed(2)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                        }}%
                     </div>
                 </div>
 
@@ -71,14 +85,21 @@
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <div class="font-semibold text-xl">{{ definedData.costs.other.count }}</div>
+                    <div class="font-semibold text-xl">{{ definedData.costs.other.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
                     <div class="mx-2">/</div>
-                    <div class="text-accent font-semibold text-2xl">${{ definedData.costs.other.amount }}</div>
+                    <div class="text-accent font-semibold text-2xl">${{ definedData.costs.other.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
                 </div>
                 <div class="flex justify-between">
                     <div class="text-sm text-emerald-500">0%</div>
                     <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.other.amount ? 'text-emerald-500' : 'text-red-500'">
-                        {{ definedData.profit.net == 0 ? definedData.costs.other.amount : ((definedData.costs.other.amount / definedData.profit.net) * 100).toFixed(2) }}%
+                        {{
+                            definedData.profit.net == 0
+                                ? definedData.costs.other.amount
+                                : ((definedData.costs.other.amount / definedData.profit.net) * 100)
+                                      .toFixed(2)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                        }}%
                     </div>
                 </div>
 
