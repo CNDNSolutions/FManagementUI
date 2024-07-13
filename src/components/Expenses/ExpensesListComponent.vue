@@ -109,10 +109,10 @@ export default {
                     newDefinedDataEl.profit.total = item.profit;
                     newDefinedDataEl.profit.net = item.profit / (1 + item.markup / 100);
                     newDefinedDataEl.cost.date = moment(item.date).format("D MMMM YYYY");
-                    newDefinedDataEl.cost.type = Math.random() >= 0.5 ? "Product" : "Others";
+                    newDefinedDataEl.cost.type = cost.type;
                     newDefinedDataEl.cost.amount = cost.amount;
                     newDefinedDataEl.cost.description = cost.description;
-                    newDefinedDataEl.cost.expensesProfit = newDefinedDataEl.profit.net == 0 ? 100 : (newDefinedDataEl.cost.amount / newDefinedDataEl.profit.net) * 100;
+                    newDefinedDataEl.cost.expensesProfit = (newDefinedDataEl.profit.net == 0 ? 100 : (newDefinedDataEl.cost.amount / newDefinedDataEl.profit.net) * 100).toFixed(2);
 
                     newDefinedData.push(newDefinedDataEl);
                 });

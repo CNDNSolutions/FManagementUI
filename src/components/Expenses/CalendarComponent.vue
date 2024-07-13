@@ -33,7 +33,7 @@ export default {
             let endDate = moment(this.defaultData[this.defaultData.length - 1].date);
 
             this.date = {
-                start: new Date(startDate.format("YYYY"), startDate.format("D") - 1, startDate.format("M")),
+                start: new Date(startDate.format("YYYY"), startDate.format("M") - 1, startDate.format("D")),
                 end: new Date(endDate.format("YYYY"), endDate.format("M") - 1, endDate.format("D")),
             };
         },

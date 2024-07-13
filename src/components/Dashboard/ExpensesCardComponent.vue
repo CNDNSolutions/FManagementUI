@@ -12,8 +12,8 @@ import { data } from "autoprefixer";
             <div class="flex flex-col">
                 <div class="font-bold text-2xl">Expenses</div>
                 <div class="text-base font-light">
-                    {{ moment(this.defaultData[0].date).format("MMMM") }} {{ moment(this.defaultData[0].date).format("Y") }} {{ moment(this.defaultData[0].date).format("D") }} -
-                    {{ moment(this.defaultData[this.defaultData.length - 1].date).format("D") }}
+                    {{ moment(this.defaultDate.start).format("MMMM") }} {{ moment(this.defaultDate.start).format("Y") }} {{ moment(this.defaultDate.start).format("D") }} -
+                    {{ moment(this.defaultDate.end).format("D") }}
                 </div>
             </div>
             <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ this.costs.amount.reduce((acc, num) => acc + num, 0) }}</div>

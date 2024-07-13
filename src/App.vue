@@ -34,7 +34,7 @@ export default {
                 this.started = true;
                 let data = {};
                 axios
-                    .get("http://localhost:8000/api/Entries/")
+                    .get("http://localhost:8000/api/Entries?periodStart=" + moment(moment.now()).startOf("month").format("YYYY-MM-DD HH:mm:ss") + "&periodEnd=" + moment(moment.now()).endOf("month").format("YYYY-MM-DD HH:mm:ss"))
                     .then((response) => {
                         data.month = response.data;
                         axios
