@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="w-full min-h-fit flex *:w-1/4 [&>*+*]:ml-4 justify-between">
+        <div class="w-full min-h-fit *:h-full flex *:w-1/4 [&>*+*]:ml-4 justify-between">
             <!-- Turnover -->
             <div title="Turnover" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col">
                 <div class="flex justify-between">
