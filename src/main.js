@@ -28,6 +28,11 @@ const router = createRouter({
             path: "/home/profit",
             component: () => import("@/views/ProfitView.vue"),
         },
+        {
+            name: "Overview",
+            path: "/home/overview",
+            component: () => import("@/views/OverviewView.vue"),
+        },
     ],
 });
 
