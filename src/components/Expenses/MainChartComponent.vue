@@ -13,7 +13,7 @@
                 <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Expenses type">
                     <div class="rounded-l border-l" @click="chartType = 'all'" v-bind:class="chartType == 'all' ? 'bg-secondary/100' : ''">All</div>
                     <div class="border-y" @click="chartType = 'product'" v-bind:class="chartType == 'product' ? 'bg-secondary/100' : ''">Products</div>
-                    <div class="rounded-r border-r" @click="chartType = 'others'" v-bind:class="chartType == 'others' ? 'bg-secondary/100' : ''">Others</div>
+                    <div class="rounded-r border-r" @click="chartType = 'other'" v-bind:class="chartType == 'other' ? 'bg-secondary/100' : ''">Other</div>
                 </div>
             </div>
         </div>
@@ -194,7 +194,7 @@ export default {
             chartGroup: "day",
             chartType: "all",
 
-            costs: { date: [], amount: { all: [], product: [], others: [] } },
+            costs: { date: [], amount: { all: [], product: [], other: [] } },
         };
     },
     mounted() {
@@ -228,7 +228,7 @@ export default {
         },
 
         defineCosts(data, date, group) {
-            let costs = { date: [], amount: { all: [], product: [], others: [] } };
+            let costs = { date: [], amount: { all: [], product: [], other: [] } };
 
             let days =
                 moment(date.start)
@@ -245,7 +245,7 @@ export default {
 
             costs.amount.product = new Array(days + 1).fill(0);
             costs.amount.all = new Array(days + 1).fill(0);
-            costs.amount.others = new Array(days + 1).fill(0);
+            costs.amount.other = new Array(days + 1).fill(0);
             let chart = "line";
             if (days + 1 == 1) {
                 chart = "bar";
@@ -253,20 +253,20 @@ export default {
 
             data.forEach((item) => {
                 let productCost = 0;
-                let othersCost = 0;
+                let otherCost = 0;
                 let allCost = 0;
                 item.costs.forEach((cost) => {
                     allCost += cost.amount;
                     if (cost.type == "product") {
                         productCost += cost.amount;
                     } else {
-                        othersCost += cost.amount;
+                        otherCost += cost.amount;
                     }
                 });
                 let date = costs.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
                 costs.amount.all[date] += allCost;
                 costs.amount.product[date] += productCost;
-                costs.amount.others[date] += othersCost;
+                costs.amount.other[date] += otherCost;
             });
 
             return { costs: costs, chart: chart };
