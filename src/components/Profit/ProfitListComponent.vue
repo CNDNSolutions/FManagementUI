@@ -2,33 +2,33 @@
     <div class="[&>*>*]:text-xs @lg:[&>*>*]:text-sm @xl:[&>*>*]:text-base rounded border-2 border-border-color bg-secondary/100">
         <div class="h-9 border-b-2 hover:*:bg-primary/5 *:h-full border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
             <!-- <div class="!w-fit min-w-9 px-2">ID</div> -->
-            <div class="flex items-center justify-center" @click="sortList('Date')">
+            <div class="flex items-center justify-center" @click="sortList('Date')" @dblclick="this.closed.includes('Date') ? this.closed.splice(this.closed.indexOf('Date'), 1) : this.closed.length < 4 ? this.closed.push('Date') : ''" v-bind:class="this.closed.includes('Date') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Date</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Date' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="flex items-center justify-center" @click="sortList('Turnover')">
+            <div class="flex items-center justify-center" @click="sortList('Turnover')" @dblclick="this.closed.includes('Turnover') ? this.closed.splice(this.closed.indexOf('Turnover'), 1) : this.closed.length < 4 ? this.closed.push('Turnover') : ''" v-bind:class="this.closed.includes('Turnover') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Turnover</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Turnover' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="flex items-center justify-center" @click="sortList('Gross')">
+            <div class="flex items-center justify-center" @click="sortList('Gross')" @dblclick="this.closed.includes('Gross') ? this.closed.splice(this.closed.indexOf('Gross'), 1) : this.closed.length < 4 ? this.closed.push('Gross') : ''" v-bind:class="this.closed.includes('Gross') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Gross Profit</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Gross' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="flex items-center justify-center" @click="sortList('Marginal')">
+            <div class="flex items-center justify-center" @click="sortList('Marginal')" @dblclick="this.closed.includes('Marginal') ? this.closed.splice(this.closed.indexOf('Marginal'), 1) : this.closed.length < 4 ? this.closed.push('Marginal') : ''" v-bind:class="this.closed.includes('Marginal') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Marginal Profit</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Marginal' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="flex items-center justify-center" @click="sortList('Net')">
+            <div class="flex items-center justify-center" @click="sortList('Net')" @dblclick="this.closed.includes('Net') ? this.closed.splice(this.closed.indexOf('Net'), 1) : this.closed.length < 4 ? this.closed.push('Net') : ''" v-bind:class="this.closed.includes('Net') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Net Profit</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Net' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
         </div>
         <div v-for="item in profit" class="h-9 border-b-2 *:h-full last:border-b-0 hover:bg-primary/5 border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
-            <div>{{ moment(item.date).format("D MMMM YYYY") }}</div>
-            <div>${{ item.turnover.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
-            <div>${{ item.gross.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
-            <div>${{ item.marginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
-            <div>${{ item.net.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div v-bind:class="this.closed.includes('Date') ? ' overflow-hidden max-w-9' : ''">{{ moment(item.date).format("D MMMM YYYY") }}</div>
+            <div v-bind:class="this.closed.includes('Turnover') ? ' overflow-hidden max-w-9' : ''">${{ item.turnover.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div v-bind:class="this.closed.includes('Gross') ? ' overflow-hidden max-w-9' : ''">${{ item.gross.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div v-bind:class="this.closed.includes('Marginal') ? ' overflow-hidden max-w-9' : ''">${{ item.marginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div v-bind:class="this.closed.includes('Net') ? ' overflow-hidden max-w-9' : ''">${{ item.net.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
         </div>
     </div>
 </template>
@@ -46,6 +46,7 @@ export default {
     data() {
         return {
             icon,
+            closed: [],
 
             sort: {
                 by: "Date",

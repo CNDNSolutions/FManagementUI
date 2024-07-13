@@ -2,35 +2,33 @@
     <div class="[&>*>*]:text-xs @lg:[&>*>*]:text-sm @xl:[&>*>*]:text-base rounded border-2 border-border-color bg-secondary/100">
         <div class="h-9 border-b-2 hover:*:bg-primary/5 *:h-full border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
             <!-- <div class="!w-fit min-w-9 px-2">ID</div> -->
-            <div class="flex items-center justify-center" @click="sortList('Date')">
+            <div class="flex items-center justify-center" @click="sortList('Date')" @dblclick="this.closed.includes('Date') ? this.closed.splice(this.closed.indexOf('Date'), 1) : this.closed.length < 4 ? this.closed.push('Date') : ''" v-bind:class="this.closed.includes('Date') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Date</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Date' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="flex items-center justify-center" @click="sortList('Amount')">
+            <div class="flex items-center justify-center" @click="sortList('Amount')" @dblclick="this.closed.includes('Amount') ? this.closed.splice(this.closed.indexOf('Amount'), 1) : this.closed.length < 4 ? this.closed.push('Amount') : ''" v-bind:class="this.closed.includes('Amount') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Amount</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Amount' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="flex items-center justify-center" @click="sortList('Type')">
+            <div class="flex items-center justify-center" @click="sortList('Type')" @dblclick="this.closed.includes('Type') ? this.closed.splice(this.closed.indexOf('Type'), 1) : this.closed.length < 4 ? this.closed.push('Type') : ''" v-bind:class="this.closed.includes('Type') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Type</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Type' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="@lg:!flex items-center justify-center !hidden" @click="sortList('Description')">
+            <div class="@lg:!flex items-center justify-center !hidden" @click="sortList('Description')" @dblclick="this.closed.includes('Description') ? this.closed.splice(this.closed.indexOf('Description'), 1) : this.closed.length < 4 ? this.closed.push('Description') : ''" v-bind:class="this.closed.includes('Description') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Description</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'Description' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
-            <div class="flex items-center justify-center" @click="sortList('ExpensesProfit')">
+            <div class="flex items-center justify-center" @click="sortList('ExpensesProfit')" @dblclick="this.closed.includes('ExpenseProfit') ? this.closed.splice(this.closed.indexOf('ExpenseProfit'), 1) : this.closed.length < 4 ? this.closed.push('ExpenseProfit') : ''" v-bind:class="this.closed.includes('ExpenseProfit') ? ' *:overflow-hidden max-w-9' : ''">
                 <div>Expenses / Profit</div>
                 <CIcon :key="sort.ASC" class="ml-2" v-bind:icon="sort.by == 'ExpensesProfit' ? (sort.ASC ? icon.cilArrowTop : icon.cilArrowBottom) : icon.cilMinus" />
             </div>
         </div>
-        <div
-            v-for="item in definedData"
-            class="h-9 border-b-2 *:h-full last:border-b-0 hover:bg-primary/5 border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
-            <div :title="item.cost.date">{{ item.cost.date }}</div>
-            <div :title="'$' + item.cost.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')">${{ item.cost.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
-            <div :title="item.cost.type.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '')">{{ item.cost.type.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
-            <div class="!hidden @lg:!block" :title="item.cost.description">{{ item.cost.description }}</div>
-            <div :title="item.cost.expensesProfit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + '%'">{{ item.cost.expensesProfit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}%</div>
+        <div v-for="item in definedData" class="h-9 border-b-2 *:h-full last:border-b-0 hover:bg-primary/5 border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
+            <div v-bind:class="this.closed.includes('Date') ? ' overflow-hidden max-w-9' : ''" :title="item.cost.date">{{ item.cost.date }}</div>
+            <div v-bind:class="this.closed.includes('Amount') ? ' overflow-hidden max-w-9' : ''" :title="'$' + item.cost.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')">${{ item.cost.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div v-bind:class="this.closed.includes('Type') ? ' overflow-hidden max-w-9' : ''" :title="item.cost.type.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '')">{{ item.cost.type.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div v-bind:class="this.closed.includes('Description') ? ' overflow-hidden max-w-9' : ''" class="!hidden @lg:!block" :title="item.cost.description">{{ item.cost.description }}</div>
+            <div v-bind:class="this.closed.includes('ExpenseProfit') ? ' overflow-hidden max-w-9' : ''" :title="item.cost.expensesProfit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + '%'">{{ item.cost.expensesProfit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}%</div>
         </div>
     </div>
 </template>
@@ -48,6 +46,9 @@ export default {
     data() {
         return {
             icon,
+
+            closed: [],
+
             sort: {
                 by: "Date",
                 ASC: true,
