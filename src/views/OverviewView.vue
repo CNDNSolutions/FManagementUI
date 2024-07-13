@@ -1,11 +1,5 @@
 <script setup>
-import CalendarComponent from "@/components/CalendarComponent.vue";
-import ProfitComponent from "@/components/Profit/ProfitComponent.vue";
-import MainChartComponent from "@/components/Profit/MainChartComponent.vue";
 import TitlePathComponent from "@/components/TitlePathComponent.vue";
-import ProfitListComponent from "@/components/Profit/ProfitListComponent.vue";
-import axios from "axios";
-import moment from "moment";
 </script>
 
 <template>

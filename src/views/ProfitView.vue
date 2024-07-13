@@ -1,7 +1,7 @@
 <script setup>
 import CalendarComponent from "@/components/CalendarComponent.vue";
 import ProfitComponent from "@/components/Profit/ProfitComponent.vue";
-import MainChartComponent from "@/components/Profit/MainChartComponent.vue";
+import ProfitChartComponent from "@/components/Profit/ProfitChartComponent.vue";
 import TitlePathComponent from "@/components/TitlePathComponent.vue";
 import ProfitListComponent from "@/components/Profit/ProfitListComponent.vue";
 import axios from "axios";
@@ -13,7 +13,7 @@ import moment from "moment";
         <TitlePathComponent />
         <div class="w-full flex flex-col [&>*+*]:mt-4">
             <CalendarComponent ref="calendar" :defaultData="monthData" class="w-fit" @dateUpdated="updateData()" />
-            <MainChartComponent class="w-full h-[500px]" :defaultData="monthData" :defaultDate="{ start: moment(this.monthData[0].date).startOf('day'), end: moment(this.monthData[this.monthData.length - 1].date).startOf('day') }" ref="profitChart" />
+            <ProfitChartComponent class="w-full h-[500px]" :defaultData="monthData" :defaultDate="{ start: moment(this.monthData[0].date).startOf('day'), end: moment(this.monthData[this.monthData.length - 1].date).startOf('day') }" ref="profitChart" />
             <ProfitComponent :defaultData="monthData" ref="profit" />
             <ProfitListComponent :defaultData="monthData" ref="profitList" />
         </div>
