@@ -11,12 +11,12 @@ import { data } from "autoprefixer";
         <div class="w-full p-3 flex justify-between items-center">
             <div class="flex flex-col">
                 <div class="font-bold text-2xl">Expenses</div>
-                <div class="text-base font-light">
+                <div class="text-base font-light" title="Period">
                     {{ moment(this.defaultDate.start).format("MMMM") }} {{ moment(this.defaultDate.start).format("Y") }} {{ moment(this.defaultDate.start).format("D") }} -
                     {{ moment(this.defaultDate.end).format("D") }}
                 </div>
             </div>
-            <div class="text-accent text-2xl font-semibold @6xl:text-3xl">${{ this.costs.amount.reduce((acc, num) => acc + num, 0) }}</div>
+            <div class="text-accent text-2xl font-semibold @6xl:text-3xl" title="Total expenses">${{ this.costs.amount.reduce((acc, num) => acc + num, 0) }}</div>
         </div>
         <LineChartComponent
             class="h-1/2"
