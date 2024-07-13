@@ -26,11 +26,11 @@
         <div
             v-for="item in definedData"
             class="h-9 border-b-2 *:h-full last:border-b-0 hover:bg-primary/5 border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
-            <div>{{ item.cost.date }}</div>
-            <div>${{ item.cost.amount }}</div>
-            <div>{{ item.cost.type }}</div>
-            <div>{{ item.cost.description }}</div>
-            <div>{{ item.cost.expensesProfit }}%</div>
+            <div :title="item.cost.date">{{ item.cost.date }}</div>
+            <div :title="'$' + item.cost.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')">${{ item.cost.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div :title="item.cost.type.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '')">{{ item.cost.type.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div class="!block" :title="item.cost.description">{{ item.cost.description }}</div>
+            <div :title="item.cost.expensesProfit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + '%'">{{ item.cost.expensesProfit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}%</div>
         </div>
     </div>
 </template>
