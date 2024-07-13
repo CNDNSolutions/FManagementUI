@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="w-full min-h-fit h-full flex *:w-1/3 justify-between">
-            <!-- all -->
+            <!-- total -->
             <div title="Total expenses" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
                 <div class="flex justify-between">
                     <div class="font-bold text-xl text-secondary-text">Total</div>
@@ -10,20 +10,26 @@
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <div class="font-semibold text-xl">{{ definedData.costs.all.count }}</div>
+                    <div class="font-semibold text-xl">{{ definedData.costs.total.count }}</div>
                     <div class="mx-2">/</div>
-                    <div class="text-accent font-semibold text-2xl">${{ definedData.costs.all.amount }}</div>
+                    <div class="text-accent font-semibold text-2xl">${{ definedData.costs.total.amount }}</div>
                 </div>
                 <div class="flex justify-between">
                     <div class="text-sm text-emerald-500">0%</div>
-                    <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.all.amount ? 'text-emerald-500' : 'text-red-500'">{{ definedData.profit.net == 0 ? definedData.costs.all.amount : ((definedData.costs.all.amount / definedData.profit.net) * 100).toFixed(2) }}%</div>
+                    <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.total.amount ? 'text-emerald-500' : 'text-red-500'">
+                        {{ definedData.profit.net == 0 ? definedData.costs.total.amount : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2) }}%
+                    </div>
                 </div>
                 <CProgress
                     v-bind:color="
-                        (definedData.profit.net == 0 ? 100 : ((definedData.costs.all.amount / definedData.profit.net) * 100).toFixed(2)) >= 100 ? 'danger' : (definedData.profit.net == 0 ? 100 : ((definedData.costs.all.amount / definedData.profit.net) * 100).toFixed(2)) >= 70 ? 'warning' : 'success'
+                        (definedData.profit.net == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2)) >= 100
+                            ? 'danger'
+                            : (definedData.profit.net == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2)) >= 70
+                            ? 'warning'
+                            : 'success'
                     "
                     class="h-2 bg-transparent border-1 border-border-color"
-                    :value="definedData.profit.net == 0 ? 100 : ((definedData.costs.all.amount / definedData.profit.net) * 100).toFixed(2)" />
+                    :value="definedData.profit.net == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2)" />
             </div>
             <!-- products -->
             <div title="Product expenses" class="border-2 mx-4 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
@@ -40,7 +46,7 @@
                 </div>
                 <div class="flex justify-between">
                     <div class="text-sm text-emerald-500">0%</div>
-                    <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.all.amount ? 'text-emerald-500' : 'text-red-500'">
+                    <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.total.amount ? 'text-emerald-500' : 'text-red-500'">
                         {{ definedData.profit.net == 0 ? definedData.costs.product.amount : ((definedData.costs.product.amount / definedData.profit.net) * 100).toFixed(2) }}%
                     </div>
                 </div>
@@ -107,7 +113,7 @@ export default {
 
             definedData: {
                 profit: { total: 0, net: 0 },
-                costs: { all: { amount: 0, count: 0 }, product: { amount: 0, count: 0 }, other: { amount: 0, count: 0 } },
+                costs: { total: { amount: 0, count: 0 }, product: { amount: 0, count: 0 }, other: { amount: 0, count: 0 } },
             },
         };
     },
@@ -127,14 +133,14 @@ export default {
         defineData(data) {
             let newDefinedData = {
                 profit: { total: 0, net: 0 },
-                costs: { all: { amount: 0, count: 0 }, product: { amount: 0, count: 0 }, other: { amount: 0, count: 0 } },
+                costs: { total: { amount: 0, count: 0 }, product: { amount: 0, count: 0 }, other: { amount: 0, count: 0 } },
             };
             data.forEach((item) => {
                 newDefinedData.profit.total += item.profit;
                 newDefinedData.profit.net += item.profit - item.profit / (1 + item.markup / 100);
                 item.costs.forEach((cost) => {
-                    newDefinedData.costs.all.amount += cost.amount;
-                    newDefinedData.costs.all.count += 1;
+                    newDefinedData.costs.total.amount += cost.amount;
+                    newDefinedData.costs.total.count += 1;
                     if (cost.type == "product") {
                         newDefinedData.costs.product.amount += cost.amount;
                         newDefinedData.costs.product.count += 1;

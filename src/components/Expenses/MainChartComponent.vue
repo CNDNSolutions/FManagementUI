@@ -11,7 +11,7 @@
 
             <div>
                 <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Expenses type">
-                    <div class="rounded-l border-l" @click="chartType = 'all'" v-bind:class="chartType == 'all' ? 'bg-secondary/100' : ''">All</div>
+                    <div class="rounded-l border-l" @click="chartType = 'total'" v-bind:class="chartType == 'total' ? 'bg-secondary/100' : ''">Total</div>
                     <div class="border-y" @click="chartType = 'product'" v-bind:class="chartType == 'product' ? 'bg-secondary/100' : ''">Products</div>
                     <div class="rounded-r border-r" @click="chartType = 'other'" v-bind:class="chartType == 'other' ? 'bg-secondary/100' : ''">Other</div>
                 </div>
@@ -37,7 +37,7 @@
                         legend: { display: false },
                         tooltip: {
                             displayColors: false,
-                            callbacks: {
+                            ctotalbacks: {
                                 label: (tooltipItem) => {
                                     return tooltipItem.dataset.label + ': $' + tooltipItem.formattedValue;
                                 },
@@ -77,7 +77,7 @@
                             },
 
                             ticks: {
-                                callback: function (value, index, values) {
+                                ctotalback: function (value, index, values) {
                                     if (Math.floor(value) === value) {
                                         return '$' + value;
                                     }
@@ -103,7 +103,7 @@
                         legend: { display: false },
                         tooltip: {
                             displayColors: false,
-                            callbacks: {
+                            ctotalbacks: {
                                 label: (tooltipItem) => {
                                     return tooltipItem.dataset.label + ': $' + tooltipItem.formattedValue;
                                 },
@@ -147,7 +147,7 @@
                                 dash: [4, 4],
                             },
                             ticks: {
-                                callback: function (value, index, values) {
+                                ctotalback: function (value, index, values) {
                                     if (Math.floor(value) === value) {
                                         return '$' + value;
                                     }
@@ -192,9 +192,9 @@ export default {
             date: {},
             chart: "line",
             chartGroup: "day",
-            chartType: "all",
+            chartType: "total",
 
-            costs: { date: [], amount: { all: [], product: [], other: [] } },
+            costs: { date: [], amount: { total: [], product: [], other: [] } },
         };
     },
     mounted() {
@@ -228,7 +228,7 @@ export default {
         },
 
         defineCosts(data, date, group) {
-            let costs = { date: [], amount: { all: [], product: [], other: [] } };
+            let costs = { date: [], amount: { total: [], product: [], other: [] } };
 
             let days =
                 moment(date.start)
@@ -244,7 +244,7 @@ export default {
             }
 
             costs.amount.product = new Array(days + 1).fill(0);
-            costs.amount.all = new Array(days + 1).fill(0);
+            costs.amount.total = new Array(days + 1).fill(0);
             costs.amount.other = new Array(days + 1).fill(0);
             let chart = "line";
             if (days + 1 == 1) {
@@ -254,9 +254,9 @@ export default {
             data.forEach((item) => {
                 let productCost = 0;
                 let otherCost = 0;
-                let allCost = 0;
+                let totalCost = 0;
                 item.costs.forEach((cost) => {
-                    allCost += cost.amount;
+                    totalCost += cost.amount;
                     if (cost.type == "product") {
                         productCost += cost.amount;
                     } else {
@@ -264,7 +264,7 @@ export default {
                     }
                 });
                 let date = costs.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
-                costs.amount.all[date] += allCost;
+                costs.amount.total[date] += totalCost;
                 costs.amount.product[date] += productCost;
                 costs.amount.other[date] += otherCost;
             });
