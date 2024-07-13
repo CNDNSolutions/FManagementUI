@@ -14,7 +14,12 @@ import * as icon from "@coreui/icons";
                 <CIcon customClassName="nav-icon" :icon="icon.cilSpeedometer" />
                 Dashboard
             </CNavItem>
-            <CNavTitle>Statistics</CNavTitle>
+            <CNavTitle class="mt-0">Statistics</CNavTitle>
+            <CNavItem href="#" @click="goTo('/home/overview')">
+                <CIcon customClassName="nav-icon" :icon="icon.cilCompass" />
+                Overview
+            </CNavItem>
+            <CNavTitle class="mt-0">Details</CNavTitle>
             <CNavItem href="#" @click="goTo('/home/expenses')">
                 <CIcon customClassName="nav-icon" :icon="icon.cilMoney" />
                 Expenses
