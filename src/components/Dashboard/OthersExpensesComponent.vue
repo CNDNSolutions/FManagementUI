@@ -4,17 +4,17 @@ import * as icon from "@coreui/icons";
 </script>
 
 <template>
-    <div class="flex flex-col justify-between rounded border-2 border-border-color bg-secondary/100 p-3 hover:bg-primary/10 cursor-pointer">
+    <div title="Other expenses" class="flex flex-col justify-between rounded border-2 border-border-color bg-secondary/100 p-3 hover:bg-primary/10 cursor-pointer">
         <div class="flex justify-between">
             <div class="font-bold text-xl text-secondary-text">Others</div>
             <CIcon :icon="icon.cilLightbulb" size="xxl" class="border-1 box-content p-1 rounded border-primary bg-primary/20" />
         </div>
 
         <div class="flex justify-between items-center">
-            <div class="text-2xl">{{ costs.currentMonth.count }}</div>
-            <div class="font-bold text-2xl text-accent @6xl:text-3xl">${{ costs.currentMonth.amount }}</div>
+            <div class="text-2xl" title="Expenses count">{{ costs.currentMonth.count }}</div>
+            <div class="font-bold text-2xl text-accent @6xl:text-3xl" title="Expenses amount">${{ costs.currentMonth.amount }}</div>
         </div>
-        <div v-bind:class="costs.lastMonth.amount > costs.currentMonth.amount ? ' *:text-emerald-500 ' : ' *:text-red-500'" class="flex items-start *:text-sm">
+        <div title="Ratio of current expenses to last month's expenses" v-bind:class="costs.lastMonth.amount > costs.currentMonth.amount ? ' *:text-emerald-500 ' : ' *:text-red-500'" class="flex items-start *:text-sm">
             <div>(</div>
             <div>{{ costs.lastMonth.amount == 0 ? 100 : (((costs.currentMonth.amount - costs.lastMonth.amount) / costs.lastMonth.amount) * 100).toFixed(2).toString().replace("-", "") }} % &nbsp;</div>
             <CIcon v-bind:icon="costs.lastMonth.amount > costs.currentMonth.amount ? icon.cilArrowBottom : icon.cilArrowTop" />
