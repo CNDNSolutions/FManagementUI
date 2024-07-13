@@ -14,15 +14,7 @@
                         <CIcon :icon="icon.cilCheck" class="h-full w-full" size="xxl" />
                     </div>
                 </div>
-                <div class="flex items-start *:text-sm" v-bind:class="definedData.profit.net > definedData.costs.all.amount ? '*:text-emerald-500' : '*:text-red-500'">
-                    <div>(</div>
-                    <div>
-                        {{ definedData.profit.net == 0 ? 100 : ((definedData.costs.all.amount / definedData.profit.net) * 100).toFixed(2) }}
-                        % &nbsp;
-                    </div>
-                    <CIcon v-bind:icon="definedData.costs.all.amount >= definedData.profit.net ? icon.cilArrowBottom : icon.cilArrowTop" />
-                    <div>)</div>
-                </div>
+                <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.all.amount ? 'text-emerald-500' : 'text-red-500'">{{ definedData.profit.net == 0 ? definedData.costs.all.amount : ((definedData.costs.all.amount / definedData.profit.net) * 100).toFixed(2) }}%</div>
 
                 <CProgress
                     v-bind:color="
@@ -44,15 +36,7 @@
                         <CIcon :icon="icon.cilTruck" class="h-full w-full" size="xxl" />
                     </div>
                 </div>
-                <div class="flex items-start *:text-sm" v-bind:class="definedData.profit.net > definedData.costs.product.amount ? '*:text-emerald-500' : '*:text-red-500'">
-                    <div>(</div>
-                    <div>
-                        {{ definedData.profit.net == 0 ? 100 : ((definedData.costs.product.amount / definedData.profit.net) * 100).toFixed(2) }}
-                        % &nbsp;
-                    </div>
-                    <CIcon v-bind:icon="definedData.costs.product.amount >= definedData.profit.net ? icon.cilArrowBottom : icon.cilArrowTop" />
-                    <div>)</div>
-                </div>
+                <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.all.amount ? 'text-emerald-500' : 'text-red-500'">{{ definedData.profit.net == 0 ? definedData.costs.product.amount : ((definedData.costs.product.amount / definedData.profit.net) * 100).toFixed(2) }}%</div>
 
                 <CProgress
                     v-bind:color="
@@ -78,14 +62,8 @@
                         <CIcon :icon="icon.cilLightbulb" class="h-full w-full" size="xxl" />
                     </div>
                 </div>
-                <div class="flex items-start *:text-sm" v-bind:class="definedData.profit.net > definedData.costs.others.amount ? '*:text-emerald-500' : '*:text-red-500'">
-                    <div>(</div>
-                    <div>
-                        {{ definedData.profit.net == 0 ? 100 : ((definedData.costs.others.amount / definedData.profit.net) * 100).toFixed(2) }}
-                        % &nbsp;
-                    </div>
-                    <CIcon v-bind:icon="definedData.costs.others.amount >= definedData.profit.net ? icon.cilArrowBottom : icon.cilArrowTop" />
-                    <div>)</div>
+                <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.others.amount ? 'text-emerald-500' : 'text-red-500'">
+                    {{ definedData.profit.net == 0 ? definedData.costs.others.amount : ((definedData.costs.others.amount / definedData.profit.net) * 100).toFixed(2) }}%
                 </div>
 
                 <CProgress
@@ -143,7 +121,7 @@ export default {
             };
             data.forEach((item) => {
                 newDefinedData.profit.total += item.profit;
-                newDefinedData.profit.net += item.profit / (1 + item.markup / 100);
+                newDefinedData.profit.net += item.profit - item.profit / (1 + item.markup / 100);
                 item.costs.forEach((cost) => {
                     newDefinedData.costs.all.amount += cost.amount;
                     newDefinedData.costs.all.count += 1;
