@@ -11,7 +11,7 @@ import moment from "moment";
 <template>
     <div class="w-5/6 @container" v-if="monthData && yearData && lastMonthData">
         <TitlePathComponent />
-        <div class="w-full flex flex-col [&>*+*]:mt-4 bg-red-500">aboba</div>
+        <div class="w-full flex flex-col [&>*+*]:mt-4"></div>
     </div>
 </template>
 
