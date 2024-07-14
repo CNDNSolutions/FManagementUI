@@ -2,24 +2,24 @@
     <div class="flex flex-col">
         <div class="flex flex-col *:w-full mb-2 [&>*>*]:w-full [&>*+*]:mt-2 justify-between items-start @lg:flex-row @lg:*:w-fit @lg:[&>*>*]:w-fit @lg:[&>*+*]:mt-0 @lg:[&>*+*]:ml-2">
             <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
-                <div class="rounded-l border-l" @click="setCosts(false, false, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
-                <div class="border-y" @click="setCosts(false, false, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
-                <div class="rounded-r border-r" @click="setCosts(false, false, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
+                <div class="rounded-l border-l" @click="setData(false, false, 'year')" v-bind:class="chart.group == 'year' ? 'bg-secondary/100' : ''">Year</div>
+                <div class="border-y" @click="setData(false, false, 'month')" v-bind:class="chart.group == 'month' ? 'bg-secondary/100' : ''">Month</div>
+                <div class="rounded-r border-r" @click="setData(false, false, 'day')" v-bind:class="chart.group == 'day' ? 'bg-secondary/100' : ''">Day</div>
             </div>
 
             <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Expenses type">
-                <div class="rounded-l border-l" @click="chartType = 'total'" v-bind:class="chartType == 'total' ? 'bg-secondary/100' : ''">Total</div>
-                <div class="border-y" @click="chartType = 'product'" v-bind:class="chartType == 'product' ? 'bg-secondary/100' : ''">Products</div>
-                <div class="rounded-r border-r" @click="chartType = 'other'" v-bind:class="chartType == 'other' ? 'bg-secondary/100' : ''">Other</div>
+                <div class="rounded-l border-l" @click="chart.content = 'total'" v-bind:class="chart.content == 'total' ? 'bg-secondary/100' : ''">Total</div>
+                <div class="border-y" @click="chart.content = 'product'" v-bind:class="chart.content == 'product' ? 'bg-secondary/100' : ''">Products</div>
+                <div class="rounded-r border-r" @click="chart.content = 'other'" v-bind:class="chart.content == 'other' ? 'bg-secondary/100' : ''">Other</div>
             </div>
         </div>
         <div class="flex flex-grow rounded border-2 border-border-color bg-secondary/100">
             <BarChartComponent
-                v-if="chart == 'bar'"
+                v-if="chart.type == 'bar'"
                 class="h-full w-full"
                 :data="{
-                    labels: this.costs.date,
-                    datasets: [{ label: 'Expenses', data: this.costs.amount[this.chartType], fill: true }],
+                    labels: this.definedData.date,
+                    datasets: [{ label: 'Expenses', data: this.definedData.amount[this.chart.content], fill: true }],
                 }"
                 :options="{
                     backgroundColor: getStyle('--primary'),
@@ -33,7 +33,7 @@
                         legend: { display: false },
                         tooltip: {
                             displayColors: false,
-                            ctotalbacks: {
+                            callbacks: {
                                 label: (tooltipItem) => {
                                     return tooltipItem.dataset.label + ': $' + tooltipItem.formattedValue;
                                 },
@@ -73,7 +73,7 @@
                             },
 
                             ticks: {
-                                ctotalback: function (value, index, values) {
+                                callback: function (value, index, values) {
                                     if (Math.floor(value) === value) {
                                         return '$' + value;
                                     }
@@ -85,11 +85,11 @@
                     },
                 }" />
             <LineChartComponent
-                v-if="chart == 'line'"
+                v-if="chart.type == 'line'"
                 class="h-full w-full"
                 :data="{
-                    labels: this.costs.date,
-                    datasets: [{ label: 'Expenses', data: this.costs.amount[this.chartType], fill: true }],
+                    labels: this.definedData.date,
+                    datasets: [{ label: 'Expenses', data: this.definedData.amount[this.chart.content], fill: true }],
                 }"
                 :options="{
                     maintainAspectRatio: false,
@@ -99,7 +99,7 @@
                         legend: { display: false },
                         tooltip: {
                             displayColors: false,
-                            ctotalbacks: {
+                            callbacks: {
                                 label: (tooltipItem) => {
                                     return tooltipItem.dataset.label + ': $' + tooltipItem.formattedValue;
                                 },
@@ -143,7 +143,7 @@
                                 dash: [4, 4],
                             },
                             ticks: {
-                                ctotalback: function (value, index, values) {
+                                callback: function (value, index, values) {
                                     if (Math.floor(value) === value) {
                                         return '$' + value;
                                     }
@@ -186,45 +186,42 @@ export default {
         return {
             data: {},
             date: {},
-            chart: "line",
-            chartGroup: "day",
-            chartType: "total",
 
-            costs: { date: [], amount: { total: [], product: [], other: [] } },
+            definedData: { date: [], amount: { total: [], product: [], other: [] } },
+            chart: {
+                type: "line",
+                group: "day",
+                content: "total",
+            },
         };
     },
     mounted() {
-        this.setCosts(this.defaultData, this.defaultDate);
+        this.setData(this.defaultData, this.defaultDate);
     },
     methods: {
         getStyle,
 
-        setCosts(data, date, group) {
-            if (!date) {
-                date = this.date;
-            }
-            if (!data) {
-                data = this.data;
-            }
-            if (!group) {
-                group = this.chartGroup;
-            }
+        setData(data, date, group) {
+            data = !data ? this.data : data;
+            date = !date ? this.date : date;
+            group = !group ? this.chart.group : group;
+
             this.data = data;
-            this.chartGroup = group;
+            this.chart.group = group;
             this.date = date;
 
-            let costs = this.defineCosts(data, date, group);
+            let newDefinedData = this.defineData(data, date, group);
 
-            if (costs.chart != this.chart) {
-                this.chart = costs.chart;
+            if (newDefinedData.chart.type != this.chart.type) {
+                this.chart.type = newDefinedData.chart.type;
             }
-            if (costs.costs != this.costs) {
-                this.costs = costs.costs;
+            if (newDefinedData.data != this.definedData) {
+                this.definedData = newDefinedData.data;
             }
         },
 
-        defineCosts(data, date, group) {
-            let costs = { date: [], amount: { total: [], product: [], other: [] } };
+        defineData(data, date, group) {
+            let newData = { date: [], amount: { total: [], product: [], other: [] } };
 
             let days =
                 moment(date.start)
@@ -232,19 +229,19 @@ export default {
                     .diff(moment(date.end).endOf(group == "day" ? "day" : group == "month" ? "month" : "year"), group == "day" ? "day" : group == "month" ? "month" : "year") * -1;
 
             for (let index = 0; index <= days; index++) {
-                costs.date.push(
+                newData.date.push(
                     moment(date.start)
                         .add(index, group == "day" ? "day" : group == "month" ? "month" : "year")
                         .format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY")
                 );
             }
 
-            costs.amount.product = new Array(days + 1).fill(0);
-            costs.amount.total = new Array(days + 1).fill(0);
-            costs.amount.other = new Array(days + 1).fill(0);
-            let chart = "line";
+            newData.amount.product = new Array(days + 1).fill(0);
+            newData.amount.total = new Array(days + 1).fill(0);
+            newData.amount.other = new Array(days + 1).fill(0);
+            let chart = { type: "line" };
             if (days + 1 == 1) {
-                chart = "bar";
+                chart.type = "bar";
             }
 
             data.forEach((item) => {
@@ -259,13 +256,13 @@ export default {
                         otherCost += cost.amount;
                     }
                 });
-                let date = costs.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
-                costs.amount.total[date] += totalCost;
-                costs.amount.product[date] += productCost;
-                costs.amount.other[date] += otherCost;
+                let date = newData.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
+                newData.amount.total[date] += totalCost;
+                newData.amount.product[date] += productCost;
+                newData.amount.other[date] += otherCost;
             });
 
-            return { costs: costs, chart: chart };
+            return { data: newData, chart: chart };
         },
     },
 };

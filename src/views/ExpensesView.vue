@@ -61,15 +61,17 @@ export default {
         async updateData(date) {
             let defaultData = get("expensesData");
 
-            defaultData.date = date;
-            defaultData.data = await byPeriod(date.start, date.end);
-            defaultData.expires = moment(moment.now()).add(2, "minute").unix();
+            if (date.start != defaultData.date.start || date.end != defaultData.date.end) {
+                defaultData.date = date;
+                defaultData.data = await byPeriod(date.start, date.end);
+                defaultData.expires = moment(moment.now()).add(2, "minute").unix();
 
-            set("expensesData", defaultData);
+                set("expensesData", defaultData);
 
-            this.$refs.expenses.setData(defaultData.data);
-            this.$refs.expensesChart.setCosts(defaultData.data, defaultData.date);
-            this.$refs.expensesList.setData(defaultData.data);
+                this.$refs.expenses.setData(defaultData.data);
+                this.$refs.expensesChart.setData(defaultData.data, defaultData.date);
+                this.$refs.expensesList.setData(defaultData.data);
+            }
         },
     },
 };
