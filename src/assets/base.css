@@ -11,5 +11,8 @@
     --primary: #5951da;
     --primary-transparent: #5a51da36;
 
+    --danger: #e55353;
+    --success: #1b9e3e;
+
     --border-color: #323a49;
 }

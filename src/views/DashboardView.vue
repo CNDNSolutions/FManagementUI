@@ -96,8 +96,6 @@ export default {
 
             set("dashboardData", defaultData);
             this.defaultData = defaultData;
-
-            console.log(defaultData);
         },
     },
 };

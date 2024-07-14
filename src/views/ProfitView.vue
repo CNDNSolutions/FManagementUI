@@ -15,7 +15,7 @@ import { startOfMonth, endOfMonth, toFormat } from "@/Helpers/Time";
     <div class="w-5/6 @container" :key="defaultData">
         <TitlePathComponent />
         <div class="w-full flex flex-col [&>*+*]:mt-4">
-            <CalendarComponent ref="calendar" :defaultDate="defaultData.date" class="w-full @lg:w-fit" @dateUpdated="setData({ start: toFormat(this.$refs.calendar.getDate().start), end: toFormat(this.$refs.calendar.getDate().end) }, true)" />
+            <CalendarComponent ref="calendar" :defaultDate="defaultData.date" class="w-full @lg:w-fit" @dateUpdated="updateData({ start: toFormat(this.$refs.calendar.getDate().start), end: toFormat(this.$refs.calendar.getDate().end) }, true)" />
             <ProfitChartComponent class="w-full h-[500px]" :defaultData="defaultData.data" :defaultDate="defaultData.date" ref="profitChart" />
             <ProfitComponent :defaultData="defaultData.data" ref="profit" />
             <ProfitListComponent :defaultData="defaultData.data" ref="profitList" />
@@ -27,7 +27,7 @@ import { startOfMonth, endOfMonth, toFormat } from "@/Helpers/Time";
 export default {
     data() {
         return {
-            defaultData: { date: 0, data: [], expires: 0 },
+            defaultData: {},
         };
     },
     mounted() {
@@ -45,29 +45,31 @@ export default {
             }
 
             //set default data
-            this.defaultData = defaultData;
+            if (!update) {
+                this.defaultData = defaultData;
+            }
 
             if (defaultData.expires < moment(moment.now()).unix()) {
                 defaultData.data = await byPeriod(defaultData.date.start, defaultData.date.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
             }
 
-            if ((defaultData.date.start != date.start || defaultData.date.end != date.end) && update) {
-                defaultData.date = date;
-                defaultData.data = await byPeriod(date.start, date.end);
-                defaultData.expires = moment(moment.now()).add(2, "minute").unix();
-
-                this.updateComponents(defaultData.data, defaultData.date);
-            }
-
             set("profitData", defaultData);
             this.defaultData = defaultData;
         },
 
-        updateComponents(data, date) {
-            this.$refs.profit.setData(data);
-            this.$refs.profitChart.setProfit(data, date);
-            this.$refs.profitList.setData(data);
+        async updateData(date) {
+            let defaultData = get("profitData");
+
+            defaultData.date = date;
+            defaultData.data = await byPeriod(date.start, date.end);
+            defaultData.expires = moment(moment.now()).add(2, "minute").unix();
+
+            set("profitData", defaultData);
+
+            this.$refs.profit.setData(defaultData.data);
+            this.$refs.profitChart.setProfit(defaultData.data, defaultData.date);
+            this.$refs.profitList.setData(defaultData.data);
         },
     },
 };
