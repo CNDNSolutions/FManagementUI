@@ -209,7 +209,7 @@ export default {
             this.chart.group = group;
             this.date = date;
 
-            let newDefinedData = this.defineProfit(data, date, group);
+            let newDefinedData = this.defineData(data, date, group);
 
             if (newDefinedData.chart.type != this.chart.type) {
                 this.chart.type = newDefinedData.chart.type;
@@ -219,7 +219,7 @@ export default {
             }
         },
 
-        defineProfit(data, date, group) {
+        defineData(data, date, group) {
             let newData = { date: [], amount: { turnover: [], gross: [], marginal: [], net: [] } };
 
             let days =
