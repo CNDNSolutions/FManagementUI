@@ -8,14 +8,14 @@ import axios from "axios";
 import moment from "moment";
 import { get, set } from "@/Helpers/localStorage";
 import { byPeriod } from "@/Helpers/API";
-import { startOfMonth, endOfMonth } from "@/Helpers/Time";
+import { startOfMonth, endOfMonth, toFormat } from "@/Helpers/Time";
 </script>
 
 <template>
     <div class="w-5/6 @container" v-if="defaultData">
         <TitlePathComponent />
         <div class="w-full flex flex-col [&>*+*]:mt-4">
-            <CalendarComponent ref="calendar" :defaultDate="defaultData.date" class="w-full @lg:w-fit" @dateUpdated="setData({ start: moment(this.$refs.calendar.getDate().start).format('YYYY-MM-DD HH:mm:ss'), end: moment(this.$refs.calendar.getDate().end).format('YYYY-MM-DD HH:mm:ss') }, true)" />
+            <CalendarComponent ref="calendar" :defaultDate="defaultData.date" class="w-full @lg:w-fit" @dateUpdated="setData({ start: toFormat(this.$refs.calendar.getDate().start), end: toFormat(this.$refs.calendar.getDate().end) }, true)" />
             <ProfitChartComponent class="w-full h-[500px]" :defaultData="defaultData.data" :defaultDate="defaultData.date" ref="profitChart" />
             <ProfitComponent :defaultData="defaultData.data" ref="profit" />
             <ProfitListComponent :defaultData="defaultData.data" ref="profitList" />
