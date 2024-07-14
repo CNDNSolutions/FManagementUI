@@ -2,9 +2,9 @@
     <div class="flex flex-col">
         <div class="flex flex-col *:w-full mb-2 [&>*>*]:w-full [&>*+*]:mt-2 justify-between items-start @lg:flex-row @lg:*:w-fit @lg:[&>*>*]:w-fit @lg:[&>*+*]:mt-0 @lg:[&>*+*]:ml-2">
             <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
-                <div class="rounded-l border-l" @click="setData(false, false, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
-                <div class="border-y" @click="setData(false, false, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
-                <div class="rounded-r border-r" @click="setData(false, false, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
+                <div class="rounded-l border-l" @click="setData(false, false, 'year')" v-bind:class="chart.group == 'year' ? 'bg-secondary/100' : ''">Year</div>
+                <div class="border-y" @click="setData(false, false, 'month')" v-bind:class="chart.group == 'month' ? 'bg-secondary/100' : ''">Month</div>
+                <div class="rounded-r border-r" @click="setData(false, false, 'day')" v-bind:class="chart.group == 'day' ? 'bg-secondary/100' : ''">Day</div>
             </div>
 
             <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Profit type">
@@ -20,7 +20,7 @@
                 class="h-full w-full"
                 :data="{
                     labels: this.definedData.date,
-                    datasets: [{ label: 'Profit', data: this.definedData[this.chart.content], fill: true }],
+                    datasets: [{ label: 'Profit', data: this.definedData.amount[this.chart.content], fill: true }],
                 }"
                 :options="{
                     backgroundColor: getStyle('--primary'),
@@ -89,7 +89,7 @@
                 class="h-full w-full"
                 :data="{
                     labels: this.definedData.date,
-                    datasets: [{ label: 'Profit', data: this.definedData[this.chart.content], fill: true }],
+                    datasets: [{ label: 'Profit', data: this.definedData.amount[this.chart.content], fill: true }],
                 }"
                 :options="{
                     maintainAspectRatio: false,
@@ -206,7 +206,7 @@ export default {
             group = !group ? this.chart.group : group;
 
             this.data = data;
-            this.chartGroup = group;
+            this.chart.group = group;
             this.date = date;
 
             let newDefinedData = this.defineProfit(data, date, group);
@@ -235,10 +235,10 @@ export default {
                 );
             }
 
-            newData.turnover = new Array(days + 1).fill(0);
-            newData.gross = new Array(days + 1).fill(0);
-            newData.marginal = new Array(days + 1).fill(0);
-            newData.net = new Array(days + 1).fill(0);
+            newData.amount.turnover = new Array(days + 1).fill(0);
+            newData.amount.gross = new Array(days + 1).fill(0);
+            newData.amount.marginal = new Array(days + 1).fill(0);
+            newData.amount.net = new Array(days + 1).fill(0);
 
             let chart = { type: "line" };
             if (days + 1 == 1) {
@@ -248,13 +248,13 @@ export default {
             data.forEach((item) => {
                 let date = newData.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
 
-                newData.turnover[date] += parseInt(item.profit.toFixed(0));
-                newData.gross[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
-                newData.marginal[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
-                newData.net[date] += parseFloat((item.profit - item.profit / (1 + item.markup / 100)).toFixed(2));
+                newData.amount.turnover[date] += parseInt(item.profit.toFixed(0));
+                newData.amount.gross[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
+                newData.amount.marginal[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
+                newData.amount.net[date] += parseFloat((item.profit - item.profit / (1 + item.markup / 100)).toFixed(2));
                 item.costs.forEach((cost) => {
-                    newData.net[date] -= parseFloat(cost.amount.toFixed(2));
-                    newData.marginal[date] -= cost.isVariable ? parseInt(cost.amount.toFixed(0)) : 0;
+                    newData.amount.net[date] -= parseFloat(cost.amount.toFixed(2));
+                    newData.amount.marginal[date] -= cost.isVariable ? parseInt(cost.amount.toFixed(0)) : 0;
                 });
             });
 
