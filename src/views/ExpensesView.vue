@@ -12,7 +12,7 @@ import { startOfMonth, endOfMonth, toFormat } from "@/Helpers/Time";
 </script>
 
 <template>
-    <div class="w-5/6 @container" v-if="defaultData">
+    <div class="w-5/6 @container" :key="defaultData">
         <TitlePathComponent />
         <div class="w-full flex flex-col [&>*+*]:mt-4">
             <CalendarComponent ref="calendar" :defaultDate="defaultData.date" class="w-full @lg:w-fit" @dateUpdated="setData({ start: toFormat(this.$refs.calendar.getDate().start), end: toFormat(this.$refs.calendar.getDate().end) }, true)" />
@@ -27,7 +27,7 @@ import { startOfMonth, endOfMonth, toFormat } from "@/Helpers/Time";
 export default {
     data() {
         return {
-            defaultData: false,
+            defaultData: { date: 0, data: [], expires: 0 },
         };
     },
     mounted() {

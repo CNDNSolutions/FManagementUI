@@ -14,7 +14,7 @@ import { byPeriod } from "@/Helpers/API";
 </script>
 
 <template>
-    <div class="w-5/6 @container" v-if="defaultData">
+    <div class="w-5/6 @container" v-if="defaultData" :key="defaultData">
         <TitlePathComponent />
         <!-- w-full h-[500px] flex -->
         <div class="w-full h-[1000px] flex flex-col @6xl:flex-row @6xl:h-[500px]">
@@ -38,7 +38,21 @@ import { byPeriod } from "@/Helpers/API";
 export default {
     data() {
         return {
-            defaultData: false,
+            defaultData: {
+                expires: 0,
+                currentMonth: {
+                    date: { start: 0, end: 0 },
+                    data: [],
+                },
+                lastMonth: {
+                    date: { start: 0, end: 0 },
+                    data: [],
+                },
+                year: {
+                    date: { start: 0, end: 0 },
+                    data: [],
+                },
+            },
         };
     },
     mounted() {
@@ -70,8 +84,8 @@ export default {
             }
 
             if (defaultData.expires < moment(moment.now()).unix()) {
-                defaultData.currentMonth = await byPeriod(defaultData.currentMonth.start, defaultData.currentMonth.end);
-                defaultData.year = await byPeriod(defaultData.year.start, defaultData.year.end);
+                defaultData.currentMonth.data = await byPeriod(defaultData.currentMonth.start, defaultData.currentMonth.end);
+                defaultData.year.data = await byPeriod(defaultData.year.start, defaultData.year.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
             }
 
