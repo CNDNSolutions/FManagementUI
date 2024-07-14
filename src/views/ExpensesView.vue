@@ -6,16 +6,19 @@ import TitlePathComponent from "@/components/TitlePathComponent.vue";
 import ExpensesListComponent from "@/components/Expenses/ExpensesListComponent.vue";
 import axios from "axios";
 import moment from "moment";
+import { get, set } from "@/Helpers/localStorage";
+import { byPeriod } from "@/Helpers/API";
+import { startOfMonth, endOfMonth, toFormat } from "@/Helpers/Time";
 </script>
 
 <template>
-    <div class="w-5/6 @container" v-if="monthData && yearData && lastMonthData">
+    <div class="w-5/6 @container" v-if="defaultData">
         <TitlePathComponent />
         <div class="w-full flex flex-col [&>*+*]:mt-4">
-            <CalendarComponent ref="calendar" :defaultData="monthData" class="w-full @lg:w-fit" @dateUpdated="updateData()" />
-            <ExpensesChartComponent class="w-full h-[500px]" :defaultData="monthData" :defaultDate="{ start: moment(this.monthData[0].date).startOf('day'), end: moment(this.monthData[this.monthData.length - 1].date).startOf('day') }" ref="expensesChart" />
-            <ExpensesComponent :defaultData="monthData" ref="expenses" />
-            <ExpensesListComponent :defaultData="monthData" ref="expensesList" />
+            <CalendarComponent ref="calendar" :defaultDate="defaultData.date" class="w-full @lg:w-fit" @dateUpdated="setData({ start: toFormat(this.$refs.calendar.getDate().start), end: toFormat(this.$refs.calendar.getDate().end) }, true)" />
+            <ExpensesChartComponent class="w-full h-[500px]" :defaultData="defaultData.data" :defaultDate="defaultData.date" ref="expensesChart" />
+            <ExpensesComponent :defaultData="defaultData.data" ref="expenses" />
+            <ExpensesListComponent :defaultData="defaultData.data" ref="expensesList" />
         </div>
     </div>
 </template>
@@ -24,31 +27,46 @@ import moment from "moment";
 export default {
     data() {
         return {
-            monthData: false,
-            lastMonthData: false,
-            yearData: false,
+            defaultData: false,
         };
     },
     mounted() {
-        let data = JSON.parse(localStorage.getItem("data"));
-
-        this.monthData = data.month;
-        this.lastMonthData = data.lastMonth;
-        this.yearData = data.year;
+        this.setData({ start: startOfMonth(), end: endOfMonth() });
     },
     methods: {
-        updateData() {
-            let date = this.$refs.calendar.getDate();
-            axios
-                .get("http://localhost:8000/api/Entries?periodStart=" + moment(date.start).startOf("day").format("YYYY-MM-DD HH:mm:ss") + "&periodEnd=" + moment(date.end).endOf("day").format("YYYY-MM-DD HH:mm:ss"))
-                .then((response) => {
-                    this.$refs.expensesChart.setCosts(response.data, date);
-                    this.$refs.expenses.setData(response.data);
-                    this.$refs.expensesList.setData(response.data);
-                })
-                .catch((response) => {
-                    console.log(response);
-                });
+        async setData(date, update = false) {
+            let defaultData = get("expensesData");
+            if (!defaultData) {
+                defaultData = {
+                    date: date,
+                    data: await byPeriod(date.start, date.end),
+                    expires: moment(moment.now()).add(2, "minute").unix(),
+                };
+            }
+
+            if (defaultData.expires < moment(moment.now()).unix()) {
+                defaultData.data = await byPeriod(defaultData.date.start, defaultData.date.end);
+                defaultData.expires = moment(moment.now()).add(2, "minute").unix();
+            }
+
+            if ((defaultData.date.start != date.start || defaultData.date.end != date.end) && update) {
+                defaultData.date = date;
+                defaultData.data = await byPeriod(date.start, date.end);
+                defaultData.expires = moment(moment.now()).add(2, "minute").unix();
+            }
+
+            set("expensesData", defaultData);
+            this.defaultData = defaultData;
+
+            if (update) {
+                this.updateComponents(defaultData.data, defaultData.date);
+            }
+        },
+
+        updateComponents(data, date) {
+            this.$refs.expenses.setData(data);
+            this.$refs.expensesChart.setCosts(data, date);
+            this.$refs.expensesList.setData(data);
         },
     },
 };
