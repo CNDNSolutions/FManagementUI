@@ -2,9 +2,7 @@
     <div>
         <VDatePicker v-model.range="this.date" :is-dark="true" @update:modelValue="this.$emit('dateUpdated')">
             <template #default="{ togglePopover }">
-                <div class="flex justify-center items-center px-3 text-lg rounded max-h-9 h-9 min-h-9 hover:bg-primary/80 cursor-pointer active:bg-primary/70 bg-primary/90" @click="togglePopover()">
-                    {{ moment(this.date.start).format("YYYY MMMM DD") }} - {{ moment(this.date.end).format("YYYY MMMM DD") }}
-                </div>
+                <div class="flex justify-center items-center px-3 text-lg rounded max-h-9 h-9 min-h-9 hover:bg-primary/80 cursor-pointer active:bg-primary/70 bg-primary/90" @click="togglePopover()">{{ moment(this.date.start).format("YYYY MMMM DD") }} - {{ moment(this.date.end).format("YYYY MMMM DD") }}</div>
             </template>
         </VDatePicker>
     </div>
@@ -15,7 +13,7 @@ import moment from "moment";
 
 export default {
     props: {
-        defaultData: Object,
+        defaultDate: Object,
     },
     data() {
         return {
@@ -29,12 +27,9 @@ export default {
         moment,
 
         setDate() {
-            let startDate = moment(this.defaultData[0].date);
-            let endDate = moment(this.defaultData[this.defaultData.length - 1].date);
-
             this.date = {
-                start: new Date(startDate.format("YYYY"), startDate.format("M") - 1, startDate.format("D")),
-                end: new Date(endDate.format("YYYY"), endDate.format("M") - 1, endDate.format("D")),
+                start: new Date(moment(this.defaultDate.start).format("YYYY"), moment(this.defaultDate.start).subtract(1, "month").format("M"), moment(this.defaultDate.start).format("D")),
+                end: new Date(moment(this.defaultDate.end).format("YYYY"), moment(this.defaultDate.end).subtract(1, "month").format("M"), moment(this.defaultDate.end).format("D")),
             };
         },
 
