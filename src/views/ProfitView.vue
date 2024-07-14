@@ -27,7 +27,7 @@ import { startOfMonth, endOfMonth, toFormat } from "@/Helpers/Time";
 export default {
     data() {
         return {
-            defaultData: {},
+            defaultData: { date: 0, data: [], expires: 0 },
         };
     },
     mounted() {
