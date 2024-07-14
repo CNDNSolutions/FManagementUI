@@ -8,6 +8,14 @@ export const endOfMonth = () => {
     return toFormat(moment().endOf("month").startOf("day"));
 };
 
+export const startOfLastMonth = () => {
+    return toFormat(moment().subtract(1, "month").startOf("month"));
+};
+
+export const endOfLastMonth = () => {
+    return toFormat(moment().subtract(1, "month").endOf("month").startOf("day"));
+};
+
 export const startOfYear = () => {
     return toFormat(moment().startOf("year"));
 };
