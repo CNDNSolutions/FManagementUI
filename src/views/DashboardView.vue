@@ -14,7 +14,7 @@ import { byPeriod } from "@/Helpers/API";
 </script>
 
 <template>
-    <div class="w-5/6 @container" v-if="defaultData" :key="defaultData">
+    <div class="w-5/6 @container" :key="defaultData">
         <TitlePathComponent />
         <!-- w-full h-[500px] flex -->
         <div class="w-full h-[1000px] flex flex-col @6xl:flex-row @6xl:h-[500px]">

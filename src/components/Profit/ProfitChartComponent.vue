@@ -219,8 +219,6 @@ export default {
                 this.chart = newProfit.chart;
             }
             this.profit = newProfit.profit;
-
-            console.log(this.profit);
         },
 
         defineProfit(data, date, group) {

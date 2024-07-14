@@ -10,6 +10,7 @@ export const byPeriod = (start, end) => {
                 resolve(response.data);
             })
             .catch((response) => {
+                console.log(response);
                 reject(response);
             });
     });
