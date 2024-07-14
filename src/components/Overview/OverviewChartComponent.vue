@@ -1,24 +1,25 @@
 <template>
     <div class="flex flex-col">
         <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
-            <div class="rounded-l border-l" @click="setData(this.defaultData, this.defaultDate, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
-            <div class="border-y" @click="setData(this.defaultData, this.defaultDate, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
-            <div class="rounded-r border-r" @click="setData(this.defaultData, this.defaultDate, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
+            <div class="rounded-l border-l" @click="setData(false, false, 'year')" v-bind:class="chart.group == 'year' ? 'bg-secondary/100' : ''">Year</div>
+            <div class="border-y" @click="setData(false, false, 'month')" v-bind:class="chart.group == 'month' ? 'bg-secondary/100' : ''">Month</div>
+            <div class="rounded-r border-r" @click="setData(false, false, 'day')" v-bind:class="chart.group == 'day' ? 'bg-secondary/100' : ''">Day</div>
         </div>
         <div class="mt-2 flex flex-grow rounded border-2 border-border-color bg-secondary/100">
             <BarChartComponent
-                v-if="chart == 'bar'"
+                v-if="chart.type == 'bar'"
                 class="h-full w-full"
                 :data="{
-                    labels: this.data.date,
-                    datasets: [{ label: 'Profit', data: this.data.profit, fill: true }],
+                    labels: this.definedData.date,
+                    datasets: [
+                        { label: 'Profit', data: this.definedData.profit, backgroundColor: getStyle('--primary') },
+                        { label: 'Expenses', data: this.definedData.costs, backgroundColor: getStyle('--danger') },
+                    ],
                 }"
                 :options="{
-                    backgroundColor: getStyle('--primary'),
                     barThickness: 'flex',
                     maxBarThickness: 8,
-                    barPercentage: 1,
-                    categoryPercentage: 0.4,
+                    categoryPercentage: 0.03,
                     borderRadius: 20,
                     maintainAspectRatio: false,
                     plugins: {
@@ -76,13 +77,13 @@
                     },
                 }" />
             <LineChartComponent
-                v-if="chart == 'line'"
+                v-if="chart.type == 'line'"
                 class="h-full w-full"
                 :data="{
-                    labels: this.data.date,
+                    labels: this.definedData.date,
                     datasets: [
-                        { label: 'Profit', data: this.data.profit, borderColor: getStyle('--primary') },
-                        { label: 'Expenses', data: this.data.costs, borderColor: getStyle('--danger') },
+                        { label: 'Profit', data: this.definedData.profit, borderColor: getStyle('--primary') },
+                        { label: 'Expenses', data: this.definedData.costs, borderColor: getStyle('--danger') },
                     ],
                 }"
                 :options="{
@@ -175,13 +176,18 @@ export default {
     },
     data() {
         return {
-            data: {
+            data: {},
+            date: {},
+
+            definedData: {
                 date: [],
                 profit: [],
                 costs: [],
             },
-            chart: "line",
-            chartGroup: "day",
+            chart: {
+                type: "line",
+                group: "day",
+            },
         };
     },
     mounted() {
@@ -190,13 +196,21 @@ export default {
     methods: {
         getStyle,
 
-        setData(data, date, group = this.chartGroup) {
-            let newData = this.defineData(data, date, group);
+        setData(data, date, group) {
+            data = !data ? this.data : data;
+            date = !date ? this.date : date;
+            group = !group ? this.chart.group : group;
 
-            if (newData.chart != this.chart) {
-                this.chart = newData.chart;
+            this.data = data;
+            this.date = date;
+            this.chart.group = group;
+
+            let newDefinedData = this.defineData(data, date, group);
+
+            if (newDefinedData.chart.type != this.chart.type) {
+                this.chart.type = newDefinedData.chart.type;
             }
-            this.data = newData.data;
+            this.definedData = newDefinedData.data;
         },
 
         defineData(data, date, group) {
@@ -218,15 +232,15 @@ export default {
             newData.profit = new Array(days + 1).fill(0);
             newData.costs = new Array(days + 1).fill(0);
 
-            let chart = "line";
+            let chart = { type: "line" };
             if (days + 1 == 1) {
-                chart = "bar";
+                chart.type = "bar";
             }
 
             data.forEach((item) => {
                 let date = newData.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
 
-                newData.profit[date] += parseFloat((item.profit - item.profit / (1 + item.markup / 100)).toFixed(2));
+                newData.profit[date] += item.profit;
                 item.costs.forEach((cost) => {
                     newData.costs[date] += parseFloat(cost.amount.toFixed(2));
                 });
