@@ -1,9 +1,11 @@
 import axios from "axios";
 import moment from "moment";
+import { toFormat } from "./Time";
+
 export const byPeriod = (start, end) => {
     return new Promise((resolve, reject) => {
         axios
-            .get("http://localhost:8000/api/Entries?periodStart=" + moment(start).format("YYYY-MM-DD HH:mm:ss") + "&periodEnd=" + moment(end).format("YYYY-MM-DD HH:mm:ss"))
+            .get("http://localhost:8000/api/Entries?periodStart=" + toFormat(start) + "&periodEnd=" + toFormat(end))
             .then((response) => {
                 resolve(response.data);
             })
