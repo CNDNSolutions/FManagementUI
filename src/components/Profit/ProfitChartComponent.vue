@@ -2,9 +2,9 @@
     <div class="flex flex-col">
         <div class="flex flex-col *:w-full mb-2 [&>*>*]:w-full [&>*+*]:mt-2 justify-between items-start @lg:flex-row @lg:*:w-fit @lg:[&>*>*]:w-fit @lg:[&>*+*]:mt-0 @lg:[&>*+*]:ml-2">
             <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
-                <div class="rounded-l border-l" @click="setProfit(false, false, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
-                <div class="border-y" @click="setProfit(false, false, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
-                <div class="rounded-r border-r" @click="setProfit(false, false, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
+                <div class="rounded-l border-l" @click="setData(false, false, 'year')" v-bind:class="chartGroup == 'year' ? 'bg-secondary/100' : ''">Year</div>
+                <div class="border-y" @click="setData(false, false, 'month')" v-bind:class="chartGroup == 'month' ? 'bg-secondary/100' : ''">Month</div>
+                <div class="rounded-r border-r" @click="setData(false, false, 'day')" v-bind:class="chartGroup == 'day' ? 'bg-secondary/100' : ''">Day</div>
             </div>
 
             <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Profit type">
@@ -16,11 +16,11 @@
         </div>
         <div class="flex flex-grow rounded border-2 border-border-color bg-secondary/100">
             <BarChartComponent
-                v-if="chart == 'bar'"
+                v-if="chart.type == 'bar'"
                 class="h-full w-full"
                 :data="{
-                    labels: this.profit.date,
-                    datasets: [{ label: 'Profit', data: this.profit[this.chartType], fill: true }],
+                    labels: this.definedData.date,
+                    datasets: [{ label: 'Profit', data: this.definedData[this.chart.content], fill: true }],
                 }"
                 :options="{
                     backgroundColor: getStyle('--primary'),
@@ -85,11 +85,11 @@
                     },
                 }" />
             <LineChartComponent
-                v-if="chart == 'line'"
+                v-if="chart.type == 'line'"
                 class="h-full w-full"
                 :data="{
-                    labels: this.profit.date,
-                    datasets: [{ label: 'Profit', data: this.profit[this.chartType], fill: true }],
+                    labels: this.definedData.date,
+                    datasets: [{ label: 'Profit', data: this.definedData[this.chart.content], fill: true }],
                 }"
                 :options="{
                     maintainAspectRatio: false,
@@ -185,44 +185,42 @@ export default {
         return {
             data: {},
             date: {},
-            chart: "line",
-            chartGroup: "day",
-            chartType: "turnover",
 
-            profit: { date: [], amount: { turnover: [], gross: [], marginal: [], net: [] } },
+            definedData: { date: [], amount: { turnover: [], gross: [], marginal: [], net: [] } },
+            chart: {
+                type: "line",
+                group: "day",
+                content: "turnover",
+            },
         };
     },
     mounted() {
-        this.setProfit(this.defaultData, this.defaultDate);
+        this.setData(this.defaultData, this.defaultDate);
     },
     methods: {
         getStyle,
 
-        setProfit(data, date, group) {
-            if (!date) {
-                date = this.date;
-            }
-            if (!data) {
-                data = this.data;
-            }
-            if (!group) {
-                group = this.chartGroup;
-            }
+        setData(data, date, group) {
+            data = !data ? this.data : data;
+            date = !date ? this.date : date;
+            group = !group ? this.chart.group : group;
 
             this.data = data;
             this.chartGroup = group;
             this.date = date;
 
-            let newProfit = this.defineProfit(data, date, group);
+            let newDefinedData = this.defineProfit(data, date, group);
 
-            if (newProfit.chart != this.chart) {
-                this.chart = newProfit.chart;
+            if (newDefinedData.chart.type != this.chart.type) {
+                this.chart.type = newDefinedData.chart.type;
             }
-            this.profit = newProfit.profit;
+            if (newDefinedData.data != this.definedData) {
+                this.definedData = newDefinedData.data;
+            }
         },
 
         defineProfit(data, date, group) {
-            let newProfit = { date: [], amount: { turnover: [], gross: [], marginal: [], net: [] } };
+            let newData = { date: [], amount: { turnover: [], gross: [], marginal: [], net: [] } };
 
             let days =
                 moment(date.start)
@@ -230,37 +228,37 @@ export default {
                     .diff(moment(date.end).endOf(group == "day" ? "day" : group == "month" ? "month" : "year"), group == "day" ? "day" : group == "month" ? "month" : "year") * -1;
 
             for (let index = 0; index <= days; index++) {
-                newProfit.date.push(
+                newData.date.push(
                     moment(date.start)
                         .add(index, group == "day" ? "day" : group == "month" ? "month" : "year")
                         .format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY")
                 );
             }
 
-            newProfit.turnover = new Array(days + 1).fill(0);
-            newProfit.gross = new Array(days + 1).fill(0);
-            newProfit.marginal = new Array(days + 1).fill(0);
-            newProfit.net = new Array(days + 1).fill(0);
+            newData.turnover = new Array(days + 1).fill(0);
+            newData.gross = new Array(days + 1).fill(0);
+            newData.marginal = new Array(days + 1).fill(0);
+            newData.net = new Array(days + 1).fill(0);
 
-            let chart = "line";
+            let chart = { type: "line" };
             if (days + 1 == 1) {
-                chart = "bar";
+                chart.type = "bar";
             }
 
             data.forEach((item) => {
-                let date = newProfit.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
+                let date = newData.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
 
-                newProfit.turnover[date] += parseInt(item.profit.toFixed(0));
-                newProfit.gross[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
-                newProfit.marginal[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
-                newProfit.net[date] += parseFloat((item.profit - item.profit / (1 + item.markup / 100)).toFixed(2));
+                newData.turnover[date] += parseInt(item.profit.toFixed(0));
+                newData.gross[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
+                newData.marginal[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
+                newData.net[date] += parseFloat((item.profit - item.profit / (1 + item.markup / 100)).toFixed(2));
                 item.costs.forEach((cost) => {
-                    newProfit.net[date] -= parseFloat(cost.amount.toFixed(2));
-                    newProfit.marginal[date] -= cost.isVariable ? parseInt(cost.amount.toFixed(0)) : 0;
+                    newData.net[date] -= parseFloat(cost.amount.toFixed(2));
+                    newData.marginal[date] -= cost.isVariable ? parseInt(cost.amount.toFixed(0)) : 0;
                 });
             });
 
-            return { profit: newProfit, chart: chart };
+            return { data: newData, chart: chart };
         },
     },
 };
