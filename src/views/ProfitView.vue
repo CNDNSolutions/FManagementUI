@@ -28,7 +28,6 @@ export default {
     data() {
         return {
             defaultData: false,
-            reload: false,
         };
     },
     mounted() {
