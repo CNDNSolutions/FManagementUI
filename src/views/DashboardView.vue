@@ -65,6 +65,7 @@ export default {
     methods: {
         async setData(date) {
             let defaultData = get("dashboardData");
+
             if (!defaultData) {
                 defaultData = {
                     expires: moment(moment.now()).add(2, "minute").unix(),
@@ -83,14 +84,20 @@ export default {
                 };
             }
 
+            //set default dat
+            this.defaultData = defaultData;
+
             if (defaultData.expires < moment(moment.now()).unix()) {
-                defaultData.currentMonth.data = await byPeriod(defaultData.currentMonth.start, defaultData.currentMonth.end);
-                defaultData.year.data = await byPeriod(defaultData.year.start, defaultData.year.end);
+                defaultData.currentMonth.data = await byPeriod(defaultData.currentMonth.date.start, defaultData.currentMonth.date.end);
+                defaultData.lastMonth.data = await byPeriod(defaultData.lastMonth.date.start, defaultData.lastMonth.date.end);
+                defaultData.year.data = await byPeriod(defaultData.year.date.start, defaultData.year.date.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
             }
 
             set("dashboardData", defaultData);
             this.defaultData = defaultData;
+
+            console.log(defaultData);
         },
     },
 };

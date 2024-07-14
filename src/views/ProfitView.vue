@@ -44,6 +44,9 @@ export default {
                 };
             }
 
+            //set default data
+            this.defaultData = defaultData;
+
             if (defaultData.expires < moment(moment.now()).unix()) {
                 defaultData.data = await byPeriod(defaultData.date.start, defaultData.date.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
