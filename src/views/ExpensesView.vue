@@ -53,14 +53,12 @@ export default {
                 defaultData.date = date;
                 defaultData.data = await byPeriod(date.start, date.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
+
+                this.updateComponents(defaultData.data, defaultData.date);
             }
 
             set("expensesData", defaultData);
             this.defaultData = defaultData;
-
-            if (update) {
-                this.updateComponents(defaultData.data, defaultData.date);
-            }
         },
 
         updateComponents(data, date) {
