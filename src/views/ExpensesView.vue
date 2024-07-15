@@ -60,6 +60,7 @@ export default {
             let defaultData = get("expensesData");
 
             if (date.start != defaultData.date.start || date.end != defaultData.date.end) {
+                this.$refs.calendar.setDate(date);
                 defaultData.date = date;
                 defaultData.data = await byPeriod(date.start, date.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
