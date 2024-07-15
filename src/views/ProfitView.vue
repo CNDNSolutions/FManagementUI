@@ -31,7 +31,7 @@ export default {
         };
     },
     mounted() {
-        this.setData({ start: startOfMonth(), end: endOfMonth() });
+        this.dispatchData();
     },
     methods: {
         async setData(date) {
