@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col">
-        <div class="flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
+        <div class="*:w-full @lg:*:w-fit flex *:max-h-9 *:h-9 *:min-h-9 *:border-y *:border-border-color *:flex *:justify-center *:items-center *:px-3 hover:*:bg-primary/10 cursor-pointer *:text-lg active:*:bg-primary/20" title="Group by">
             <div class="rounded-l border-l" @click="setData(false, false, 'year')" v-bind:class="chart.group == 'year' ? 'bg-secondary/100' : ''">Year</div>
             <div class="border-y" @click="setData(false, false, 'month')" v-bind:class="chart.group == 'month' ? 'bg-secondary/100' : ''">Month</div>
             <div class="rounded-r border-r" @click="setData(false, false, 'day')" v-bind:class="chart.group == 'day' ? 'bg-secondary/100' : ''">Day</div>
