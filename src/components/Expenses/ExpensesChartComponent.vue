@@ -93,8 +93,8 @@
                 }"
                 :options="{
                     maintainAspectRatio: false,
-                    backgroundColor: getStyle('--primary-transparent'),
-                    borderColor: getStyle('--primary'),
+                    backgroundColor: getStyle('--danger-transparent'),
+                    borderColor: getStyle('--danger'),
                     plugins: {
                         legend: { display: false },
                         tooltip: {
