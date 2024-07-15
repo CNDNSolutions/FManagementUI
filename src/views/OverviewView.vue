@@ -6,6 +6,8 @@ import { get, set } from "@/Helpers/localStorage";
 import { byPeriod } from "@/Helpers/API";
 import { startOfMonth, endOfMonth, toFormat } from "@/Helpers/Time";
 import OverviewChartComponent from "@/components/Overview/OverviewChartComponent.vue";
+import OverviewCardsComponent from "@/components/Overview/OverviewCardsComponent.vue";
+import OverviewListComponent from "@/components/Overview/OverviewListComponent.vue";
 </script>
 
 <template>
@@ -14,6 +16,8 @@ import OverviewChartComponent from "@/components/Overview/OverviewChartComponent
         <div class="w-full flex flex-col [&>*+*]:mt-4">
             <CalendarComponent ref="calendar" :defaultDate="defaultData.date" class="w-full @lg:w-fit" @dateUpdated="updateData({ start: toFormat(this.$refs.calendar.getDate().start), end: toFormat(this.$refs.calendar.getDate().end) }, true)" />
             <OverviewChartComponent class="w-full h-[500px]" :defaultData="defaultData.data" :defaultDate="defaultData.date" ref="overviewChart" />
+            <OverviewCardsComponent :defaultData="defaultData.data" ref="overviewCards" />
+            <OverviewListComponent :defaultData="defaultData.data" ref="overviewList" />
         </div>
     </div>
 </template>
@@ -62,6 +66,8 @@ export default {
                 set("overviewData", defaultData);
 
                 this.$refs.overviewChart.setData(defaultData.data, defaultData.date);
+                this.$refs.overviewCards.setData(defaultData.data);
+                this.$refs.overviewList.setData(defaultData.data);
             }
         },
     },
