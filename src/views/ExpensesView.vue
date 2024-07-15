@@ -60,20 +60,20 @@ export default {
             let defaultData = get("expensesData");
 
             if (date.start != defaultData.date.start || date.end != defaultData.date.end) {
-                this.$refs.calendar.setDate(date);
                 defaultData.date = date;
                 defaultData.data = await byPeriod(date.start, date.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
 
                 set("expensesData", defaultData);
 
+                this.$refs.calendar.setDate(date);
                 this.$refs.expenses.setData(defaultData.data);
                 this.$refs.expensesChart.setData(defaultData.data, defaultData.date);
                 this.$refs.expensesList.setData(defaultData.data);
             }
         },
-        dispatchData() {
-            this.setData(this.getSetData());
+        async dispatchData() {
+            await this.setData(this.getSetData());
             let params = new URLSearchParams(window.location.search);
             if (params.get("update")) {
                 this.updateData(this.getSetData());

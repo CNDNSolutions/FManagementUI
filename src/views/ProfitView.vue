@@ -44,9 +44,6 @@ export default {
                 };
             }
 
-            //set default data
-            this.defaultData = defaultData;
-
             if (defaultData.expires < moment(moment.now()).unix()) {
                 defaultData.data = await byPeriod(defaultData.date.start, defaultData.date.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
@@ -60,20 +57,20 @@ export default {
             let defaultData = get("profitData");
 
             if (date.start != defaultData.date.start || date.end != defaultData.date.end) {
-                this.$refs.calendar.setDate(date);
                 defaultData.date = date;
                 defaultData.data = await byPeriod(date.start, date.end);
                 defaultData.expires = moment(moment.now()).add(2, "minute").unix();
 
                 set("profitData", defaultData);
 
+                this.$refs.calendar.setDate(date);
                 this.$refs.profit.setData(defaultData.data);
                 this.$refs.profitChart.setData(defaultData.data, defaultData.date);
                 this.$refs.profitList.setData(defaultData.data);
             }
         },
-        dispatchData() {
-            this.setData(this.getSetData());
+        async dispatchData() {
+            await this.setData(this.getSetData());
             let params = new URLSearchParams(window.location.search);
             if (params.get("update")) {
                 this.updateData(this.getSetData());

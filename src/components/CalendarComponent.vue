@@ -28,10 +28,12 @@ export default {
 
         setDate(date) {
             date = !date ? this.defaultDate : date;
+            console.log("date to set", date);
             this.date = {
                 start: new Date(moment(date.start).format("YYYY"), moment(date.start).subtract(1, "month").format("M"), moment(date.start).format("D")),
                 end: new Date(moment(date.end).format("YYYY"), moment(date.end).subtract(1, "month").format("M"), moment(date.end).format("D")),
             };
+            console.log("date setted", this.date);
         },
 
         getDate() {
