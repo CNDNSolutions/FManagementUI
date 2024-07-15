@@ -20,9 +20,9 @@
         </div>
         <div v-for="item in definedData" class="h-9 border-b-2 *:h-full last:border-b-0 hover:bg-primary/5 border-border-color flex items-center justify-between *:w-full *:overflow-hidden *:text-ellipsis *:whitespace-nowrap [&>*+*]:border-l-2 *:border-border-color *:flex *:items-center *:justify-center">
             <div>{{ moment(item.date).format("D MMMM YYYY") }}</div>
-            <div class="hover:bg-primary/10" @click="this.$router.push({ path: '/home/profit', query: { start: item.date, end: item.date } })">${{ item.profit.turnover.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
-            <div class="hover:bg-primary/10" @click="this.$router.push({ path: '/home/profit', query: { start: item.date, end: item.date } })">${{ item.profit.net.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
-            <div class="hover:bg-primary/10" @click="this.$router.push({ path: '/home/expenses', query: { start: item.date, end: item.date } })">${{ item.costs.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div class="hover:bg-primary/10" @click="this.$router.push({ path: '/home/profit', query: { start: item.date, end: item.date, update: true } })">${{ item.profit.turnover.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div class="hover:bg-primary/10" @click="this.$router.push({ path: '/home/profit', query: { start: item.date, end: item.date, update: true } })">${{ item.profit.net.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+            <div class="hover:bg-primary/10" @click="this.$router.push({ path: '/home/expenses', query: { start: item.date, end: item.date, update: true } })">${{ item.costs.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
         </div>
     </div>
 </template>
