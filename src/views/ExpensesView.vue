@@ -31,10 +31,10 @@ export default {
         };
     },
     mounted() {
-        this.setData({ start: startOfMonth(), end: endOfMonth() });
+        this.dispatchData();
     },
     methods: {
-        async setData(date, update = false) {
+        async setData(date) {
             let defaultData = get("expensesData");
             if (!defaultData) {
                 defaultData = {
@@ -45,9 +45,7 @@ export default {
             }
 
             //set default data
-            if (!update) {
-                this.defaultData = defaultData;
-            }
+            this.defaultData = defaultData;
 
             if (defaultData.expires < moment(moment.now()).unix()) {
                 defaultData.data = await byPeriod(defaultData.date.start, defaultData.date.end);
@@ -72,6 +70,16 @@ export default {
                 this.$refs.expensesChart.setData(defaultData.data, defaultData.date);
                 this.$refs.expensesList.setData(defaultData.data);
             }
+        },
+        dispatchData() {
+            this.setData(this.getSetData());
+            let params = new URLSearchParams(window.location.search);
+            if (params.get("update")) {
+                this.updateData(this.getSetData());
+            }
+        },
+        getSetData() {
+            return { start: /[?&]start=/.test(location.search) ? new URLSearchParams(window.location.search).get("start") : startOfMonth(), end: /[?&]end=/.test(location.search) ? new URLSearchParams(window.location.search).get("end") : endOfMonth() };
         },
     },
 };
