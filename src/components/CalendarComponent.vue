@@ -26,10 +26,11 @@ export default {
     methods: {
         moment,
 
-        setDate() {
+        setDate(date) {
+            date = !date ? this.defaultDate : date;
             this.date = {
-                start: new Date(moment(this.defaultDate.start).format("YYYY"), moment(this.defaultDate.start).subtract(1, "month").format("M"), moment(this.defaultDate.start).format("D")),
-                end: new Date(moment(this.defaultDate.end).format("YYYY"), moment(this.defaultDate.end).subtract(1, "month").format("M"), moment(this.defaultDate.end).format("D")),
+                start: new Date(moment(date.start).format("YYYY"), moment(date.start).subtract(1, "month").format("M"), moment(date.start).format("D")),
+                end: new Date(moment(date.end).format("YYYY"), moment(date.end).subtract(1, "month").format("M"), moment(date.end).format("D")),
             };
         },
 
