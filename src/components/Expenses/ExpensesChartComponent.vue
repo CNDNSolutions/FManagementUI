@@ -22,7 +22,7 @@
                     datasets: [{ label: 'Expenses', data: this.definedData.amount[this.chart.content], fill: true }],
                 }"
                 :options="{
-                    backgroundColor: getStyle('--primary'),
+                    backgroundColor: getStyle('--danger'),
                     barThickness: 'flex',
                     maxBarThickness: 8,
                     barPercentage: 1,
