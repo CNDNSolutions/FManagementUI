@@ -75,8 +75,8 @@ export default {
             data.forEach((item) => {
                 let newDataEl = { date: "", profit: { turnover: 0, net: 0 }, costs: { total: 0 } };
                 newDataEl.date = item.date;
-                newDataEl.profit.turnover = item.profit.toFixed(0);
-                newDataEl.profit.net = parseFloat((item.profit - item.profit / (1 + item.markup / 100)).toFixed(2));
+                newDataEl.profit.turnover = parseInt(item.profit.toFixed(0));
+                newDataEl.profit.net = parseFloat(item.profit.toFixed(2));
                 item.costs.forEach((cost) => {
                     newDataEl.profit.net -= parseFloat(cost.amount.toFixed(2));
                     newDataEl.costs.total += parseInt(cost.amount.toFixed(0));

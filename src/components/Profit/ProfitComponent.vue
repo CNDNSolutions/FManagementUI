@@ -120,13 +120,18 @@ export default {
         defineProfit(data) {
             let newProfit = { turnover: 0, gross: 0, marginal: 0, net: 0 };
             data.forEach((item) => {
-                newProfit.turnover += parseInt(item.profit.toFixed(0));
-                newProfit.gross += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
-                newProfit.marginal += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
-                newProfit.net += parseFloat((item.profit - item.profit / (1 + item.markup / 100)).toFixed(2));
+                newProfit.turnover += item.profit;
+                newProfit.gross += item.profit;
+                newProfit.marginal += item.profit;
+                newProfit.net += item.profit;
                 item.costs.forEach((cost) => {
-                    newProfit.net -= parseFloat(cost.amount.toFixed(2));
-                    newProfit.marginal -= cost.isVariable ? parseInt(cost.amount.toFixed(0)) : 0;
+                    if (cost.type == "product") {
+                        newProfit.gross -= cost.amount;
+                    }
+                    if (cost.isVariable) {
+                        newProfit.marginal -= cost.amount;
+                    }
+                    newProfit.net -= cost.amount;
                 });
             });
             return newProfit;

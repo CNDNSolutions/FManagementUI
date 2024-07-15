@@ -16,11 +16,11 @@
                 </div>
                 <div class="flex justify-between">
                     <div class="text-sm text-emerald-500">0%</div>
-                    <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.total.amount ? 'text-emerald-500' : 'text-red-500'">
+                    <div class="text-sm" v-bind:class="definedData.profit.turnover > definedData.costs.total.amount ? 'text-emerald-500' : 'text-red-500'">
                         {{
-                            definedData.profit.net == 0
+                            definedData.profit.turnover == 0
                                 ? definedData.costs.total.amount
-                                : ((definedData.costs.total.amount / definedData.profit.net) * 100)
+                                : ((definedData.costs.total.amount / definedData.profit.turnover) * 100)
                                       .toFixed(2)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
@@ -28,15 +28,9 @@
                     </div>
                 </div>
                 <CProgress
-                    v-bind:color="
-                        (definedData.profit.net == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2)) >= 100
-                            ? 'danger'
-                            : (definedData.profit.net == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2)) >= 70
-                            ? 'warning'
-                            : 'success'
-                    "
+                    v-bind:color="(definedData.profit.turnover == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.turnover) * 100).toFixed(2)) >= 100 ? 'danger' : (definedData.profit.turnover == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.turnover) * 100).toFixed(2)) >= 70 ? 'warning' : 'success'"
                     class="h-2 bg-transparent border-1 border-border-color"
-                    :value="definedData.profit.net == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.net) * 100).toFixed(2)" />
+                    :value="definedData.profit.turnover == 0 ? 100 : ((definedData.costs.total.amount / definedData.profit.turnover) * 100).toFixed(2)" />
             </div>
             <!-- products -->
             <div title="Product expenses" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
@@ -53,11 +47,11 @@
                 </div>
                 <div class="flex justify-between">
                     <div class="text-sm text-emerald-500">0%</div>
-                    <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.total.amount ? 'text-emerald-500' : 'text-red-500'">
+                    <div class="text-sm" v-bind:class="definedData.profit.turnover > definedData.costs.total.amount ? 'text-emerald-500' : 'text-red-500'">
                         {{
-                            definedData.profit.net == 0
+                            definedData.profit.turnover == 0
                                 ? definedData.costs.product.amount
-                                : ((definedData.costs.product.amount / definedData.profit.net) * 100)
+                                : ((definedData.costs.product.amount / definedData.profit.turnover) * 100)
                                       .toFixed(2)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
@@ -66,15 +60,9 @@
                 </div>
 
                 <CProgress
-                    v-bind:color="
-                        (definedData.profit.net == 0 ? 100 : ((definedData.costs.product.amount / definedData.profit.net) * 100).toFixed(2)) >= 100
-                            ? 'danger'
-                            : (definedData.profit.net == 0 ? 100 : ((definedData.costs.product.amount / definedData.profit.net) * 100).toFixed(2)) >= 70
-                            ? 'warning'
-                            : 'success'
-                    "
+                    v-bind:color="(definedData.profit.turnover == 0 ? 100 : ((definedData.costs.product.amount / definedData.profit.turnover) * 100).toFixed(2)) >= 100 ? 'danger' : (definedData.profit.turnover == 0 ? 100 : ((definedData.costs.product.amount / definedData.profit.turnover) * 100).toFixed(2)) >= 70 ? 'warning' : 'success'"
                     class="h-2 bg-transparent border-1 border-border-color"
-                    :value="definedData.profit.net == 0 ? 100 : ((definedData.costs.product.amount / definedData.profit.net) * 100).toFixed(2)" />
+                    :value="definedData.profit.turnover == 0 ? 100 : ((definedData.costs.product.amount / definedData.profit.turnover) * 100).toFixed(2)" />
             </div>
             <!-- other -->
             <div title="Other expenses" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between">
@@ -91,11 +79,11 @@
                 </div>
                 <div class="flex justify-between">
                     <div class="text-sm text-emerald-500">0%</div>
-                    <div class="text-sm" v-bind:class="definedData.profit.net > definedData.costs.other.amount ? 'text-emerald-500' : 'text-red-500'">
+                    <div class="text-sm" v-bind:class="definedData.profit.turnover > definedData.costs.other.amount ? 'text-emerald-500' : 'text-red-500'">
                         {{
-                            definedData.profit.net == 0
+                            definedData.profit.turnover == 0
                                 ? definedData.costs.other.amount
-                                : ((definedData.costs.other.amount / definedData.profit.net) * 100)
+                                : ((definedData.costs.other.amount / definedData.profit.turnover) * 100)
                                       .toFixed(2)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
@@ -104,15 +92,9 @@
                 </div>
 
                 <CProgress
-                    v-bind:color="
-                        (definedData.profit.net == 0 ? 100 : ((definedData.costs.other.amount / definedData.profit.net) * 100).toFixed(2)) >= 100
-                            ? 'danger'
-                            : (definedData.profit.net == 0 ? 100 : ((definedData.costs.other.amount / definedData.profit.net) * 100).toFixed(2)) >= 70
-                            ? 'warning'
-                            : 'success'
-                    "
+                    v-bind:color="(definedData.profit.turnover == 0 ? 100 : ((definedData.costs.other.amount / definedData.profit.turnover) * 100).toFixed(2)) >= 100 ? 'danger' : (definedData.profit.turnover == 0 ? 100 : ((definedData.costs.other.amount / definedData.profit.turnover) * 100).toFixed(2)) >= 70 ? 'warning' : 'success'"
                     class="h-2 bg-transparent border-1 border-border-color"
-                    :value="definedData.profit.net == 0 ? 100 : ((definedData.costs.other.amount / definedData.profit.net) * 100).toFixed(2)" />
+                    :value="definedData.profit.turnover == 0 ? 100 : ((definedData.costs.other.amount / definedData.profit.turnover) * 100).toFixed(2)" />
             </div>
         </div>
     </div>
@@ -133,7 +115,7 @@ export default {
             icon,
 
             definedData: {
-                profit: { total: 0, net: 0 },
+                profit: { turnover: 0 },
                 costs: { total: { amount: 0, count: 0 }, product: { amount: 0, count: 0 }, other: { amount: 0, count: 0 } },
             },
         };
@@ -153,12 +135,11 @@ export default {
         },
         defineData(data) {
             let newDefinedData = {
-                profit: { total: 0, net: 0 },
+                profit: { turnover: 0 },
                 costs: { total: { amount: 0, count: 0 }, product: { amount: 0, count: 0 }, other: { amount: 0, count: 0 } },
             };
             data.forEach((item) => {
-                newDefinedData.profit.total += item.profit;
-                newDefinedData.profit.net += item.profit - item.profit / (1 + item.markup / 100);
+                newDefinedData.profit.turnover += item.profit;
                 item.costs.forEach((cost) => {
                     newDefinedData.costs.total.amount += cost.amount;
                     newDefinedData.costs.total.count += 1;

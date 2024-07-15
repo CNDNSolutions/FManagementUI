@@ -56,7 +56,7 @@ export default {
 
             definedData: [
                 {
-                    profit: { total: 0, net: 0 },
+                    profit: { turnover: 0, net: 0 },
                     cost: { date: "", amount: 0, type: "", description: "", expensesProfit: 0 },
                 },
             ],
@@ -103,17 +103,20 @@ export default {
             data.forEach((item) => {
                 item.costs.forEach((cost) => {
                     let newDefinedDataEl = {
-                        profit: { total: 0, net: 0 },
+                        profit: { turnover: 0, net: 0 },
                         cost: { date: "", amount: 0, type: "", description: "", expensesProfit: 0 },
                     };
 
-                    newDefinedDataEl.profit.total = item.profit;
-                    newDefinedDataEl.profit.net = item.profit - item.profit / (1 + item.markup / 100);
+                    newDefinedDataEl.profit.turnover = parseInt(item.profit.toFixed(0));
+                    newDefinedDataEl.profit.net = parseFloat(item.profit.toFixed(2));
+
+                    newDefinedDataEl.profit.net -= parseFloat(cost.amount.toFixed(2));
+
                     newDefinedDataEl.cost.date = moment(item.date).format("D MMMM YYYY");
                     newDefinedDataEl.cost.type = cost.type;
                     newDefinedDataEl.cost.amount = cost.amount;
                     newDefinedDataEl.cost.description = cost.description;
-                    newDefinedDataEl.cost.expensesProfit = (newDefinedDataEl.profit.net == 0 ? 100 : (newDefinedDataEl.cost.amount / newDefinedDataEl.profit.net) * 100).toFixed(2);
+                    newDefinedDataEl.cost.expensesProfit = (newDefinedDataEl.profit.turnover == 0 ? 100 : (newDefinedDataEl.cost.amount / newDefinedDataEl.profit.turnover) * 100).toFixed(2);
 
                     newDefinedData.push(newDefinedDataEl);
                 });

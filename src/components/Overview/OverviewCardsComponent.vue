@@ -10,7 +10,14 @@
                     </div>
                 </div>
 
-                <div class="text-accent font-semibold text-2xl">${{ definedData.profit.turnover.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+                <div class="text-accent font-semibold text-2xl">
+                    ${{
+                        definedData.profit.turnover
+                            .toFixed(0)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                    }}
+                </div>
             </div>
             <!-- net porift -->
             <div title="Net profit" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between" @click="this.$router.push({ path: '/home/profit', query: { start: this.defaultData[0].date, end: this.defaultData[this.defaultData.length - 1].date, update: true } })">
@@ -21,7 +28,14 @@
                     </div>
                 </div>
 
-                <div class="text-accent font-semibold text-2xl">${{ definedData.profit.net.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+                <div class="text-accent font-semibold text-2xl">
+                    ${{
+                        definedData.profit.net
+                            .toFixed(2)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                    }}
+                </div>
             </div>
             <!-- expenses -->
             <div title="Total expenses" class="border-2 bg-secondary/100 border-border-color rounded p-3 flex flex-col justify-between" @click="this.$router.push({ path: '/home/expenses', query: { start: this.defaultData[0].date, end: this.defaultData[this.defaultData.length - 1].date, update: true } })">
@@ -32,7 +46,14 @@
                     </div>
                 </div>
 
-                <div class="text-accent font-semibold text-2xl">${{ definedData.costs.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }}</div>
+                <div class="text-accent font-semibold text-2xl">
+                    ${{
+                        definedData.costs.total
+                            .toFixed(0)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                    }}
+                </div>
             </div>
         </div>
     </div>
@@ -78,9 +99,10 @@ export default {
             };
             data.forEach((item) => {
                 newDefinedData.profit.turnover += item.profit;
-                newDefinedData.profit.net += item.profit - item.profit / (1 + item.markup / 100);
+                newDefinedData.profit.net += item.profit;
                 item.costs.forEach((cost) => {
                     newDefinedData.costs.total += cost.amount;
+
                     newDefinedData.profit.net -= cost.amount;
                 });
             });

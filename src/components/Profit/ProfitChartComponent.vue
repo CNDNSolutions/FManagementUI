@@ -248,13 +248,18 @@ export default {
             data.forEach((item) => {
                 let date = newData.date.indexOf(moment(item.date).format(group == "day" ? "D MMM" : group == "month" ? "MMM YYYY" : "YYYY"));
 
-                newData.amount.turnover[date] += parseInt(item.profit.toFixed(0));
-                newData.amount.gross[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
-                newData.amount.marginal[date] += parseInt((item.profit - item.profit / (1 + item.markup / 100)).toFixed(0));
-                newData.amount.net[date] += parseFloat((item.profit - item.profit / (1 + item.markup / 100)).toFixed(2));
+                newData.amount.turnover[date] += item.profit;
+                newData.amount.gross[date] += item.profit;
+                newData.amount.marginal[date] += item.profit;
+                newData.amount.net[date] += item.profit;
                 item.costs.forEach((cost) => {
-                    newData.amount.net[date] -= parseFloat(cost.amount.toFixed(2));
-                    newData.amount.marginal[date] -= cost.isVariable ? parseInt(cost.amount.toFixed(0)) : 0;
+                    if (cost.type == "product") {
+                        newData.amount.gross[date] -= cost.amount;
+                    }
+                    if (cost.isVariable) {
+                        newData.amount.marginal[date] -= cost.amount;
+                    }
+                    newData.amount.net[date] -= cost.amount;
                 });
             });
 

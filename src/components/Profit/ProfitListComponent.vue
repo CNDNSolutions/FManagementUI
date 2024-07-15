@@ -84,13 +84,19 @@ export default {
             data.forEach((item) => {
                 let newProfitEl = { date: "", turnover: 0, gross: 0, marginal: 0, net: 0 };
                 newProfitEl.date = item.date;
-                newProfitEl.turnover = item.profit.toFixed(0);
-                newProfitEl.gross = (item.profit - item.profit / (1 + item.markup / 100)).toFixed(0);
-                newProfitEl.marginal = (item.profit - item.profit / (1 + item.markup / 100)).toFixed(0);
-                newProfitEl.net = (item.profit - item.profit / (1 + item.markup / 100)).toFixed(2);
+                newProfitEl.turnover = parseInt(item.profit.toFixed(0));
+                newProfitEl.gross = parseInt(item.profit.toFixed(0));
+                newProfitEl.marginal = parseInt(item.profit.toFixed(0));
+                newProfitEl.net = parseFloat(item.profit.toFixed(2));
                 item.costs.forEach((cost) => {
-                    newProfitEl.net -= cost.amount.toFixed(2);
-                    newProfitEl.marginal -= cost.isVariable ? cost.amount.toFixed(0) : 0;
+                    if (cost.type == "product") {
+                        newProfitEl.gross -= parseInt(cost.amount.toFixed(0));
+                    }
+                    if (cost.isVariable) {
+                        newProfitEl.marginal -= parseInt(cost.amount.toFixed(0));
+                    }
+
+                    newProfitEl.net -= parseFloat(cost.amount.toFixed(2));
                 });
                 newProfit.push(newProfitEl);
             });

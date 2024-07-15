@@ -242,7 +242,7 @@ export default {
 
                 newData.profit[date] += item.profit;
                 item.costs.forEach((cost) => {
-                    newData.costs[date] += parseFloat(cost.amount.toFixed(2));
+                    newData.costs[date] += cost.amount;
                 });
             });
 
